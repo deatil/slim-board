@@ -1,0 +1,48 @@
+{
+    "name": "deatil/slim-board",
+    "description": "A slim-board",
+    "keywords": [
+        "microframework",
+        "rest",
+        "router",
+        "psr7"
+    ],
+    "homepage": "http://github.com/deatil/slim-board",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "deatil",
+            "email": "deatil@github.com",
+            "homepage": "https://github.com/deatil",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "bryanjhv/slim-session": "~4.0",
+        "catfan/medoo": "^2.1",
+        "monolog/monolog": "^2.7",
+        "php-di/php-di": "^6.4",
+        "ramsey/uuid": "^4.3",
+        "slim/psr7": "^1.5",
+        "slim/slim": "^4.10",
+        "slim/twig-view": "^3.3"
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "allow-plugins": {}
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}

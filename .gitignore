@@ -1,0 +1,6 @@
+build
+.DS
+.idea
+.vscode
+.phpunit*
+composer.lock
