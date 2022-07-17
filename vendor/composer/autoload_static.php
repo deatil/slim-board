@@ -15,9 +15,19 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
+        '28ed50a0a447ccf5546080c5dc147594' => __DIR__ . '/../..' . '/app/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zeuxisoo\\Whoops\\Slim\\Tests\\' => 27,
+            'Zeuxisoo\\Whoops\\Slim\\' => 21,
+        ),
+        'W' => 
+        array (
+            'Whoops\\' => 7,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -28,6 +38,7 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Component\\Finder\\' => 25,
             'Slim\\Views\\' => 11,
             'Slim\\Psr7\\' => 10,
             'Slim\\' => 5,
@@ -58,6 +69,10 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
         array (
             'Invoker\\' => 8,
         ),
+        'G' => 
+        array (
+            'Gregwar\\' => 8,
+        ),
         'F' => 
         array (
             'Fig\\Http\\Message\\' => 17,
@@ -78,6 +93,18 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zeuxisoo\\Whoops\\Slim\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zeuxisoo/slim-whoops/tests',
+        ),
+        'Zeuxisoo\\Whoops\\Slim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zeuxisoo/slim-whoops/src/Zeuxisoo/Whoops/Slim',
+        ),
+        'Whoops\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -97,6 +124,10 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Component\\Finder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/finder',
         ),
         'Slim\\Views\\' => 
         array (
@@ -155,6 +186,10 @@ class ComposerStaticInit00e2013484e2f3d035cc9fe0db2adf15
         'Invoker\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-di/invoker/src',
+        ),
+        'Gregwar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'Fig\\Http\\Message\\' => 
         array (

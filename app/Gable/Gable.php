@@ -85,5 +85,47 @@ class Gable
         
         return $p;
     }
+    
+    // ===================
+    
+    /**
+     * orm
+     */
+    public static function db()
+    {
+        return static::$di->get("db");
+    }
+    
+    /**
+     * 日志
+     */
+    public static function logger()
+    {
+        return static::$di->get("logger");
+    }
+    
+    /**
+     * view
+     */
+    public static function view()
+    {
+        return static::$di->get("view");
+    }
+    
+    /**
+     * cookie
+     */
+    public static function cookie()
+    {
+        return static::$di->get("cookie");
+    }
+    
+    /**
+     * 配置
+     */
+    public static function config()
+    {
+        return static::$di->get("config");
+    }
 
 }

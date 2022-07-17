@@ -24,6 +24,9 @@ class Bootstrap
     {
         // 容器
         $di = $app->getContainer();
+        
+        // 设置默认时间时区
+        ini_set('date.timezone', 'Asia/Shanghai');
 
         // 初始化配置
         Module\Config::init($app, $di);

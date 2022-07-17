@@ -35,7 +35,13 @@ class View
             return Twig::create(
                 $path, 
                 [
+                    'debug' => $config->get('view.debug'),
+                    'charset' => $config->get('view.charset'),
+                    'strict_variables' => $config->get('view.strict_variables'),
+                    'autoescape' => $config->get('view.autoescape'),
                     'cache' => $cachePath,
+                    'auto_reload' => $config->get('view.auto_reload'),
+                    'optimizations' => $config->get('view.optimizations'),
                 ]
             );
         });

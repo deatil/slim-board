@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Route;
 
 use App\Gable\Gable;
+use App\Controller;
 
 /**
  * 路由
@@ -21,25 +22,16 @@ class Route
      */
     public static function init($app)
     {
-        // Define named route
-        $app->get('/hello/{name}', function ($request, $response, $args) {
-            Gable::$di->get("logger")->info('info');
-            
-            return $this->get('view')->render($response, 'profile.html', [
-                'name' => $args['name']
-            ]);
-        })->setName('profile');
-
-        // Render from string
-        $app->get('/hi/{name}', function ($request, $response, $args) {
-            $str = $this->get('view')->fetchFromString(
-                '<p>Hi, my name is {{ name }}.</p>',
-                [
-                    'name' => $args['name']
-                ]
-            );
-            $response->getBody()->write($str);
-            return $response;
-        });
+        // 首页
+        $indexController = new Controller\Index();
+        $app->get('/hello/{name}', $indexController->index())->setName('profile');
+        $app->get('/hi/{name}', $indexController->show());
+        
+        // 账号相关
+        $authController = new Controller\Auth();
+        $app->get('/auth/captcha', $authController->captcha())->setName('board.auth-captcha');
+        $app->get('/auth/login', $authController->login())->setName('board.auth-login');
+        $app->post('/auth/login', $authController->loginCheck())->setName('board.auth-login-check');
+        $app->get('/auth/logout', $authController->logout())->setName('board.auth-logout');
     }
 }

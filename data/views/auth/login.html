@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>登录</title>
+</head>
+
+<body>
+    <div class="box">
+        登录
+
+        <hr />
+
+        <form method="post">
+            账号:<br>
+            <input type="text" name="username">
+            <br>
+            密码:<br>
+            <input type="text" name="password">
+            <br>
+            验证码:<br>
+            <input type="text" name="captchaid">
+            <br>
+            <img src="{{ url_for('board.auth-captcha') }}" />
+            <br>
+            
+            <button class="layui-btn">登录</button>
+        </form> 
+
+    </div>
+</body>
+

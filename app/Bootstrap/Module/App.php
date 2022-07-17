@@ -28,6 +28,11 @@ class App
         Gable::$app = $app;
         Gable::$di = $di;
         
+        // 调试
         Gable::$debug = $config->get('app.debug');
+        
+        // 设置时间时区
+        $timezone = $config->get('app.timezone');
+        ini_set('date.timezone', $timezone);
     }
 }
