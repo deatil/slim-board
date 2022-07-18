@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Gable\Gable;
+use App\Board\Request;
 
 /**
  * Index
@@ -12,37 +13,27 @@ use App\Gable\Gable;
  * @create 2022-7-17
  * @author deatil
  */
-class Index
+class Index extends Base
 {
     /**
      * 首页
      */
-    public function index()
+    public function index($request, $response, $args)
     {
-        return function($request, $response, $args) {
-            Gable::$di->get("logger")->info('info');
-            
-            return $this->get('view')->render($response, 'profile.html', [
-                'name' => $args['name']
-            ]);
-        };
+        return $this->view($response, 'index/index.html', [
+            'name' => $args['name'] ?? ''
+        ]);
     }
     
     /**
-     * 详情
+     * data
      */
-    public function show()
+    public function data($request, $response, $args)
     {
-        return function($request, $response, $args) {
-            $str = $this->get('view')->fetchFromString(
-                '<p>Hi, my name is {{ name }}.</p>',
-                [
-                    'name' => $args['name']
-                ]
-            );
-            
-            $response->getBody()->write($str);
-            return $response;
-        };
+        $data = Request::from($args, 'name');
+        
+        return $this->view($response, 'index/data.html', [
+            'name' => $data,
+        ]);
     }
 }

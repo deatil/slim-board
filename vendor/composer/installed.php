@@ -91,6 +91,15 @@
             'reference' => '5579edf28aee1190a798bfa5be8bc16c563bd524',
             'dev_requirement' => false,
         ),
+        'nesbot/carbon' => array(
+            'pretty_version' => '2.59.1',
+            'version' => '2.59.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../nesbot/carbon',
+            'aliases' => array(),
+            'reference' => 'a9000603ea337c8df16cc41f8b6be95a65f4d0f5',
+            'dev_requirement' => false,
+        ),
         'nikic/fast-route' => array(
             'pretty_version' => 'v1.3.0',
             'version' => '1.3.0.0',
@@ -309,6 +318,30 @@
             'aliases' => array(),
             'reference' => '13f6d1271c663dc5ae9fb843a8f16521db7687a1',
             'dev_requirement' => false,
+        ),
+        'symfony/translation' => array(
+            'pretty_version' => 'v6.1.0',
+            'version' => '6.1.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/translation',
+            'aliases' => array(),
+            'reference' => 'b254416631615bc6fe49b0a67f18658827288147',
+            'dev_requirement' => false,
+        ),
+        'symfony/translation-contracts' => array(
+            'pretty_version' => 'v3.1.1',
+            'version' => '3.1.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/translation-contracts',
+            'aliases' => array(),
+            'reference' => '606be0f48e05116baef052f7f3abdb345c8e02cc',
+            'dev_requirement' => false,
+        ),
+        'symfony/translation-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '2.3|3.0',
+            ),
         ),
         'twig/twig' => array(
             'pretty_version' => 'v3.4.1',

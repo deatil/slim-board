@@ -16,6 +16,7 @@ class Gable
     public static $app;
 
     // 容器对象
+    // Gable::$di->get("logger")->info('info');
     public static $di;
 
     // 调试模式

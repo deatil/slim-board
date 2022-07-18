@@ -19,7 +19,7 @@ class User
      */
     public static function getInfoById($id)
     {
-        $data = Gable::db()->select("user",  "*", [
+        $data = Gable::db()->get("user",  "*", [
             "id[=]" => $id
         ]);
 
@@ -31,7 +31,7 @@ class User
      */
     public static function getInfoByUsername($username)
     {
-        $data = Gable::db()->select("user",  "*", [
+        $data = Gable::db()->get("user",  "*", [
             "username[=]" => $username,
         ]);
 

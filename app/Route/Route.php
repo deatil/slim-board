@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Route;
 
+use Slim\Routing\RouteCollectorProxy;
+
 use App\Gable\Gable;
 use App\Controller;
+use App\Middleware;
 
 /**
  * 路由
@@ -23,15 +26,23 @@ class Route
     public static function init($app)
     {
         // 首页
-        $indexController = new Controller\Index();
-        $app->get('/hello/{name}', $indexController->index())->setName('profile');
-        $app->get('/hi/{name}', $indexController->show());
+        $app->get('/', [Controller\Index::class, 'index'])->setName('board.index');
+        $app->get('/data/{name}', [Controller\Index::class, 'data'])->setName('board.index');
         
         // 账号相关
-        $authController = new Controller\Auth();
-        $app->get('/auth/captcha', $authController->captcha())->setName('board.auth-captcha');
-        $app->get('/auth/login', $authController->login())->setName('board.auth-login');
-        $app->post('/auth/login', $authController->loginCheck())->setName('board.auth-login-check');
-        $app->get('/auth/logout', $authController->logout())->setName('board.auth-logout');
+        $app->get('/auth/captcha', [Controller\Auth::class, 'captcha'])->setName('board.auth-captcha');
+        $app->get('/auth/login', [Controller\Auth::class, 'login'])->setName('board.auth-login');
+        $app->post('/auth/login', [Controller\Auth::class, 'loginCheck'])->setName('board.auth-login-check');
+        $app->get('/auth/logout', [Controller\Auth::class, 'logout'])->setName('board.auth-logout');
+        
+        // 管理分钟
+        $app->group('/admin', function (RouteCollectorProxy $group) {
+            $group->get('/bar', function ($request, $response, $args) {
+                $response
+                    ->getBody()
+                    ->write("123");
+                return $response;
+            });
+        })->add(new Middleware\AuthMiddleware());
     }
 }

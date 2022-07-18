@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bootstrap\Module;
 
-use App\Utils;
+use App\Board;
 
 /**
  * Cookie 初始化
@@ -26,7 +26,7 @@ class Cookie
         $di->set('cookie', function() use($di) {
             $config = $di->get('config');
             
-            return Utils\Cookie::make([
+            return Board\Cookie::make([
                 'expire'   => $config->get('cookie.expire'),
                 'path'     => $config->get('cookie.path'),
                 'domain'   => $config->get('cookie.domain'),

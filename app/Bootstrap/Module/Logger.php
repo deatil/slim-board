@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bootstrap\Module;
 
-use App\Utils;
+use App\Board;
 use App\Gable\Gable;
 
 /**
@@ -31,7 +31,7 @@ class Logger
             $path = Gable::basePath($config->get('logger.path'));
             $level = $config->get('logger.level');
             
-            $log = Utils\Logger::make($name, $path, $level);
+            $log = Board\Logger::make($name, $path, $level);
             
             return $log;
         });

@@ -24,6 +24,7 @@
         "catfan/medoo": "^2.1",
         "gregwar/captcha": "^1.1",
         "monolog/monolog": "^2.7",
+        "nesbot/carbon": "^2.59",
         "php-di/php-di": "^6.4",
         "ramsey/uuid": "^4.3",
         "slim/psr7": "^1.5",

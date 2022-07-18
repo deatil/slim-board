@@ -8,6 +8,8 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 use App\Gable\Gable;
+use App\Twig\TwigExtension;
+use App\Twig\TwigRuntimeLoader;
 
 /**
  * View 初始化
@@ -32,7 +34,7 @@ class View
             $path = Gable::basePath($config->get('view.path'));
             $cachePath = Gable::basePath($config->get('view.cache'));
             
-            return Twig::create(
+            $twig = Twig::create(
                 $path, 
                 [
                     'debug' => $config->get('view.debug'),
@@ -44,9 +46,19 @@ class View
                     'optimizations' => $config->get('view.optimizations'),
                 ]
             );
+            
+            // 导入器，必须
+            $runtimeLoader = new TwigRuntimeLoader();
+            $twig->addRuntimeLoader($runtimeLoader);
+            
+            // 扩展函数，必须
+            $extension = new TwigExtension();
+            $twig->addExtension($extension);
+            
+            return $twig;
         });
 
         // 添加 Twig-View 中间件
-        $app->add(TwigMiddleware::createFromContainer($app));
+        $app->add(TwigMiddleware::createFromContainer($app), "view");
     }
 }

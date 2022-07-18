@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Bootstrap\Module;
 
-use App\Utils;
+use App\Board;
 use App\Gable\Gable;
 
 /**
@@ -33,7 +33,7 @@ class Config
                 $files = glob($configPath . '/*' . $configExt);
             }
 
-            $config = new Utils\Config($configPath, $configExt);
+            $config = new Board\Config($configPath, $configExt);
             if (count($files) > 0) {
                 foreach ($files as $file) {
                     $config->load($file, pathinfo($file, PATHINFO_FILENAME));

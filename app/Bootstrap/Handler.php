@@ -7,6 +7,7 @@ namespace App\Bootstrap;
 use Throwable;
 use Psr\Http\Message\ServerRequestInterface;
 use Zeuxisoo\Whoops\Slim\WhoopsMiddleware;
+use Slim\Middleware\ContentLengthMiddleware;
 
 use App\Gable\Gable;
 
@@ -53,5 +54,8 @@ class Handler
                 'title'  => 'Slim Board Error',
             ]));
         }
+        
+        $contentLengthMiddleware = new ContentLengthMiddleware();
+        $app->add($contentLengthMiddleware);
     }
 }

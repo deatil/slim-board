@@ -17,4 +17,9 @@ return [
     'strict_variables' => false,
     // 
     'optimizations' => -1,
+    
+    // 静态文件根目录
+    'assets' => '/static',
+    // 静态文件根目录
+    'admin_assets' => '/static/admin',
 ];
