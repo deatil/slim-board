@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zeuxisoo\Whoops\Slim\WhoopsMiddleware;
 use Slim\Middleware\ContentLengthMiddleware;
 
+use App\Board\Msg;
 use App\Gable\Gable;
 
 /**
@@ -36,9 +37,14 @@ class Handler
                 bool $logErrorDetails
             ) use ($app) {
                 $payload = $exception->getMessage();
+                
+                $template = Gable::$di->get('config')->get('app.error_tpl');;
+                
+                $msg = Gable::$di->get('config')->get('app.error_msg');;
+                $body = Msg::toError($msg, '', 3, $template);
 
                 $response = $app->getResponseFactory()->createResponse();
-                $response->getBody()->write($payload);
+                $response = $response->withBody($body);
 
                 return $response;
             };

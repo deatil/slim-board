@@ -13,7 +13,7 @@ namespace App\Board;
 class Cookie
 {
     // 过期时间 单位为s 默认是会话 关闭浏览器就不在存在
-    private $expire   = 0;
+    private $expires   = 0;
     
     // 路径 默认在本目录及子目录下有效 /表示根目录下有效
     private $path     = '';
@@ -71,7 +71,7 @@ class Cookie
         }
         
         // 保存 cookie
-        $this->setcookie($name, $value, $this->expire);
+        $this->setcookie($name, $value, $options);
     }
     
     /**
@@ -115,14 +115,17 @@ class Cookie
         if (! isset($_COOKIE[$name])) {
             return;
         }
+        
+        // 过期时间
+        $this->expires = time() - 1;
 
         $value = $_COOKIE[$name];
         if (is_array($value)) {
             foreach ($value as $k => $v) {
-                $this->setcookie($name.'['.$k.']', '', time() - 1);
+                $this->setcookie($name.'['.$k.']', '', $options);
             }
         } else {
-            $this->setcookie($name, '', time() - 1);
+            $this->setcookie($name, '', $options);
         }
     }
     
@@ -131,19 +134,19 @@ class Cookie
      * 
      * @param  string $key    键
      * @param  array  $value  值
-     * @param  array  $expire 过期时间
+     * @param  array  $expires 过期时间
      * @return void
      */
-    public function setcookie($key, $value, $expire, array $options = []) 
+    public function setcookie($key, $value, array $options = []) 
     {
-        if (!empty($options)) {
+        if (! empty($options)) {
             $this->setOptions($options);
         }
 
         setcookie(
             $key,
             $value,
-            $expire,
+            $this->expires,
             $this->path,
             $this->domain,
             $this->secure,
@@ -156,8 +159,8 @@ class Cookie
      */
     private function setOptions(array $options = [])
     {
-        if (isset($options['expire'])) {
-            $this->expire = $options['expire'];
+        if (isset($options['expires'])) {
+            $this->expires = $options['expires'];
         }
         
         if (isset($options['path'])) {
@@ -169,11 +172,11 @@ class Cookie
         }
         
         if (isset($options['secure'])) {
-            $this->secure = $options['secure'];
+            $this->secure = (bool) $options['secure'];
         }
         
         if (isset($options['httponly'])) {
-            $this->httponly = $options['httponly'];
+            $this->httponly = (bool) $options['httponly'];
         }
         
         return $this;

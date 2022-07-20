@@ -433,6 +433,68 @@
             "install-path": "../gregwar/captcha"
         },
         {
+            "name": "inhere/php-validate",
+            "version": "v2.8.4",
+            "version_normalized": "2.8.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inhere/php-validate.git",
+                "reference": "6f19cb84b33b38bd8fa6e4bf5490762505c4d065"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inhere/php-validate/zipball/6f19cb84b33b38bd8fa6e4bf5490762505c4d065",
+                "reference": "6f19cb84b33b38bd8fa6e4bf5490762505c4d065",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">7.1.0",
+                "toolkit/stdlib": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5"
+            },
+            "time": "2022-07-18T05:41:51+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Inhere\\Validate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "inhere",
+                    "email": "in.798@qq.com",
+                    "homepage": "https://github.com/inhere"
+                }
+            ],
+            "description": "an simple validate, filter library of the php",
+            "homepage": "https://github.com/inhere/php-validate",
+            "keywords": [
+                "form-validate",
+                "library",
+                "php-library",
+                "validate",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/inhere/php-validate/issues",
+                "source": "https://github.com/inhere/php-validate/tree/v2.8.4"
+            },
+            "install-path": "../inhere/php-validate"
+        },
+        {
             "name": "laravel/serializable-closure",
             "version": "v1.2.0",
             "version_normalized": "1.2.0.0",
@@ -2520,6 +2582,73 @@
                 }
             ],
             "install-path": "../symfony/translation-contracts"
+        },
+        {
+            "name": "toolkit/stdlib",
+            "version": "v1.2.0",
+            "version_normalized": "1.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-toolkit/stdlib.git",
+                "reference": "a33c3ccc63f388c81a75d0fec3893c9d0212286b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-toolkit/stdlib/zipball/a33c3ccc63f388c81a75d0fec3893c9d0212286b",
+                "reference": "a33c3ccc63f388c81a75d0fec3893c9d0212286b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">7.1.0",
+                "symfony/polyfill-php80": "~1.0"
+            },
+            "suggest": {
+                "inhere/php-validate": "Very lightweight data validate tool"
+            },
+            "time": "2021-12-02T14:51:12+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/func.php"
+                ],
+                "psr-4": {
+                    "Toolkit\\Stdlib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "inhere",
+                    "email": "in.798@qq.com",
+                    "homepage": "http://www.yzone.net/"
+                }
+            ],
+            "description": "some stdlib tool library of the php",
+            "homepage": "https://github.com/php-toolkit/stdlib",
+            "keywords": [
+                "array",
+                "library",
+                "object",
+                "php",
+                "string",
+                "tool"
+            ],
+            "support": {
+                "issues": "https://github.com/php-toolkit/stdlib/issues",
+                "source": "https://github.com/php-toolkit/stdlib/tree/v1.2.0"
+            },
+            "install-path": "../toolkit/stdlib"
         },
         {
             "name": "twig/twig",

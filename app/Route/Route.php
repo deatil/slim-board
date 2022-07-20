@@ -7,8 +7,9 @@ namespace App\Route;
 use Slim\Routing\RouteCollectorProxy;
 
 use App\Gable\Gable;
-use App\Controller;
 use App\Middleware;
+use App\Controller\Board as BoardController;
+use App\Controller\Admin as AdminController;
 
 /**
  * 路由
@@ -26,23 +27,38 @@ class Route
     public static function init($app)
     {
         // 首页
-        $app->get('/', [Controller\Index::class, 'index'])->setName('board.index');
-        $app->get('/data/{name}', [Controller\Index::class, 'data'])->setName('board.index');
+        $indexController = BoardController\Index::class;
+        $app->get('/', [$indexController, 'index'])->setName('board.index');
         
         // 账号相关
-        $app->get('/auth/captcha', [Controller\Auth::class, 'captcha'])->setName('board.auth-captcha');
-        $app->get('/auth/login', [Controller\Auth::class, 'login'])->setName('board.auth-login');
-        $app->post('/auth/login', [Controller\Auth::class, 'loginCheck'])->setName('board.auth-login-check');
-        $app->get('/auth/logout', [Controller\Auth::class, 'logout'])->setName('board.auth-logout');
+        $authController = BoardController\Auth::class;
+        $app->get('/auth/captcha', [$authController, 'captcha'])->setName('board.auth-captcha');
+        $app->get('/auth/login', [$authController, 'login'])->setName('board.auth-login');
+        $app->post('/auth/login', [$authController, 'loginCheck'])->setName('board.auth-login-check');
+        $app->get('/auth/logout', [$authController, 'logout'])->setName('board.auth-logout');
         
         // 管理分钟
         $app->group('/admin', function (RouteCollectorProxy $group) {
-            $group->get('/bar', function ($request, $response, $args) {
-                $response
-                    ->getBody()
-                    ->write("123");
-                return $response;
-            });
-        })->add(new Middleware\AuthMiddleware());
+            // 登录
+            $authController = AdminController\Auth::class;
+            $group->get('/auth/captcha', [$authController, 'captcha'])->setName('admin.auth-captcha');
+            $group->get('/auth/login', [$authController, 'login'])->setName('admin.auth-login');
+            $group->post('/auth/login', [$authController, 'loginCheck'])->setName('admin.auth-login-check');
+            $group->get('/auth/logout', [$authController, 'logout'])->setName('admin.auth-logout');
+            
+            $group->group('', function (RouteCollectorProxy $group) {
+                // 首页
+                $indexController = AdminController\Index::class;
+                $group->get('/index', [$indexController, 'index'])->setName('admin.index');
+                $group->get('/data/{name}', [$indexController, 'data'])->setName('admin.data');
+                
+                // 账号信息
+                $profileController = AdminController\Profile::class;
+                $group->get('/profile', [$profileController, 'index'])->setName('admin.profile');
+                $group->post('/profile', [$profileController, 'save'])->setName('admin.profile-save');
+            })->add(new Middleware\AdminAuthMiddleware());
+        })
+        ->add(new Middleware\AuthMiddleware())
+        ->add(new Middleware\AdminCheckMiddleware());
     }
 }

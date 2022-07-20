@@ -1,0 +1,7 @@
+index
+
+{% if user() != "" %}
+    <a href="{{ url_for('board.auth-logout') }}">退出登录</a>
+{% else %}
+    <a href="{{ url_for('board.auth-login') }}">马上登录</a>
+{% endif %}

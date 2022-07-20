@@ -73,6 +73,15 @@
             'reference' => '4bb668e6b40e3205a020ca5ee4ca8cff8b8780c5',
             'dev_requirement' => false,
         ),
+        'inhere/php-validate' => array(
+            'pretty_version' => 'v2.8.4',
+            'version' => '2.8.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../inhere/php-validate',
+            'aliases' => array(),
+            'reference' => '6f19cb84b33b38bd8fa6e4bf5490762505c4d065',
+            'dev_requirement' => false,
+        ),
         'laravel/serializable-closure' => array(
             'pretty_version' => 'v1.2.0',
             'version' => '1.2.0.0',
@@ -342,6 +351,15 @@
             'provided' => array(
                 0 => '2.3|3.0',
             ),
+        ),
+        'toolkit/stdlib' => array(
+            'pretty_version' => 'v1.2.0',
+            'version' => '1.2.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../toolkit/stdlib',
+            'aliases' => array(),
+            'reference' => 'a33c3ccc63f388c81a75d0fec3893c9d0212286b',
+            'dev_requirement' => false,
         ),
         'twig/twig' => array(
             'pretty_version' => 'v3.4.1',

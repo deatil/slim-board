@@ -37,4 +37,16 @@ class User
 
         return $data;
     }
+    
+    /**
+     * 更改信息
+     */
+    public static function updateById($id, array $data = [])
+    {
+        $data = Gable::db()->update("user",  $data, [
+            "id[=]" => $id,
+        ]);
+
+        return $data->rowCount();
+    }
 }

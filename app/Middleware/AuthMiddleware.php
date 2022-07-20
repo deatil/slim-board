@@ -9,8 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use App\Board\Msg;
 use App\Gable\Gable;
-use App\Board\Middleware;
+use App\Auth\Auth as AuthTool;
 
 /**
  * 登录验证
@@ -33,11 +34,20 @@ class AuthMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
         
-        $auth = Gable::$di->get("session")->get('login_auth');
-        if (empty($auth)) {
-            $body = Middleware::toError("请先登录");
+        $id = Gable::$di->get("session")->get('login_auth');
+        if (empty($id)) {
+            $id = Gable::$di->get("cookie")->get('bla');
+            if (! empty($id)) {
+                $id = AuthTool::make()->decrypt($id);
+            }
             
-            return $response->withBody($body);
+            if (empty($id)) {
+                $body = Msg::toError("请先登录");
+                
+                return $response->withBody($body);
+            }
+            
+            Gable::$di->get("session")->set('login_auth', $id);
         }
         
         return $response;

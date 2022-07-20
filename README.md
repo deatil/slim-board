@@ -8,7 +8,7 @@
 
 ## 环境要求
 
- - PHP >= 7.4.0
+ - PHP >= 8.1.0
  - Fileinfo PHP Extension
 
 

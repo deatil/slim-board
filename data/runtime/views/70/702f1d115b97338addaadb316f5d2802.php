@@ -34,7 +34,23 @@ class __TwigTemplate_36aac6f3a6ddc0a21a565b93840c00f4 extends Template
     {
         $macros = $this->macros;
         // line 1
-        echo "index";
+        echo "index
+
+";
+        // line 3
+        if (($this->env->getRuntime('App\Twig\TwigRuntimeExtension')->user() != "")) {
+            // line 4
+            echo "    <a href=\"";
+            echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("board.auth-logout"), "html", null, true);
+            echo "\">退出登录</a>
+";
+        } else {
+            // line 6
+            echo "    <a href=\"";
+            echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("board.auth-login"), "html", null, true);
+            echo "\">马上登录</a>
+";
+        }
     }
 
     public function getTemplateName()
@@ -42,9 +58,14 @@ class __TwigTemplate_36aac6f3a6ddc0a21a565b93840c00f4 extends Template
         return "index/index.html";
     }
 
+    public function isTraitable()
+    {
+        return false;
+    }
+
     public function getDebugInfo()
     {
-        return array (  37 => 1,);
+        return array (  49 => 6,  43 => 4,  41 => 3,  37 => 1,);
     }
 
     public function getSourceContext()

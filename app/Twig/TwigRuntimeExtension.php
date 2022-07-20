@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Gable\Gable;
+use App\Auth\User;
 
 /**
  * 扩展
@@ -14,6 +15,12 @@ use App\Gable\Gable;
  */
 class TwigRuntimeExtension
 {
+    // 静态文件根目录
+    public function user(): array
+    {
+        return User::info();
+    }
+
     // 静态文件根目录
     public function assets(string $path): string
     {

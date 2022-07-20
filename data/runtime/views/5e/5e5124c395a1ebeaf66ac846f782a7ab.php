@@ -64,7 +64,7 @@ class __TwigTemplate_6898333055f6660adb6aa48fc75b5af9 extends Template
             <br>
             
             密码:<br>
-            <input type=\"text\" 
+            <input type=\"password\" 
                 name=\"password\"
                 id=\"password\">
             <br>
