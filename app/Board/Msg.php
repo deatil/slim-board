@@ -7,7 +7,7 @@ namespace App\Board;
 use Psr\Http\Message\StreamInterface;
 use Slim\Psr7\Factory\StreamFactory;
 
-use App\Gable\Gable;
+use App\Board\Gable;
 
 /**
  * 输出信息
@@ -26,7 +26,7 @@ class Msg
         $msg, 
         $url = '', 
         $wait = 5,
-        $tpl = 'error/msg.html'
+        $tpl = 'error/error.html'
     ): StreamInterface {
         $streamFactory = new StreamFactory();
         $body = $streamFactory->createStream();
@@ -54,7 +54,7 @@ class Msg
         $msg, 
         $url = '', 
         $wait = 5,
-        $tpl = 'error/msg.html'
+        $tpl = 'error/error.html'
     ): StreamInterface {
         $streamFactory = new StreamFactory();
         $body = $streamFactory->createStream();

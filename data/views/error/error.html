@@ -16,10 +16,36 @@
     <hr />
 
     {{ msg }}
+
+    {% if url != "" %}
+        <p class="mb-4 jump">
+            页面将在 <b id="wait">{{ wait }}</b> 秒后自动跳转
+        </p>
+    {% endif %}
     
     <br />
     
     <a class="btn btn-primary " href='/'>返回首页</a>
+
+    {% if url != "" %}
+        <a class="btn btn-success" id="href" href="{{ url|raw }}">立即跳转</a>
+    {% endif %}
+
+    {% if url != "" %}
+    <script type="text/javascript">
+    ;(function(){
+        var wait = document.getElementById('wait'),
+            href = document.getElementById('href').href;
+        var interval = setInterval(function(){
+            var time = --wait.innerHTML;
+            if(time <= 0) {
+                location.href = href;
+                clearInterval(interval);
+            };
+        }, 1000);
+    })();
+    </script>
+    {% endif %}
 
 </body>
 </html>

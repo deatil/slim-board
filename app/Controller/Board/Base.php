@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Board;
 
-use App\Gable\Gable;
+use App\Board\Gable;
 use App\Board\Controller as BaseController;
 
 /**

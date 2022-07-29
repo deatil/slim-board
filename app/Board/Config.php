@@ -124,11 +124,11 @@ class Config
      * @param  string $name 一级配置名
      * @return array
      */
-    protected function pull(string $name)
+    protected function pull(string $name, $default = "")
     {
         $name = strtolower($name);
 
-        return $this->config[$name] ?? "";
+        return $this->config[$name] ?? $default;
     }
 
     /**
@@ -146,7 +146,7 @@ class Config
         }
 
         if (false === strpos($name, '.')) {
-            return $this->pull($name);
+            return $this->pull($name, $default);
         }
 
         $name    = explode('.', $name);

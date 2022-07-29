@@ -7,10 +7,10 @@ namespace App\Controller\Admin;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
-use App\Gable\Gable;
+use App\Board\Gable;
 use App\Board\Auth as BoardAuth;
 use App\Board\Validation;
-use App\Auth\User as AuthUser;
+use App\Board\Auth\User as AuthUser;
 
 /**
  * 账号相关
@@ -27,7 +27,7 @@ class Auth extends Base
     {
         $phraseBuilder = new PhraseBuilder(4);
         $captcha = new CaptchaBuilder(null, $phraseBuilder);
-        $captcha->build();
+        $captcha->build(150, 40);
         
         $captchaId = $captcha->getPhrase();
         
@@ -97,9 +97,6 @@ class Auth extends Base
         Gable::$di->get("session")->delete('captcha_id');
         
         $userInfo = AuthUser::info();
-        if (empty($userInfo)) {
-            return $this->errorJson($response, '登录失败');
-        }
         
         $check = BoardAuth::passwordVerify($password, $userInfo['password']);
         if (! $check) {

@@ -7,7 +7,7 @@ namespace App\Board;
 use Carbon\Carbon;
 
 use App\Board\Msg;
-use App\Gable\Gable;
+use App\Board\Gable;
 use App\Board\Response;
 
 /**
@@ -41,7 +41,7 @@ abstract class Controller
      */
     public function successHtml($response, $msg = "成功", $url = "", $wait = 3)
     {
-        $template = Gable::$di->get('config')->get('app.jump_tpl');;
+        $template = Gable::$di->get('config')->get('app.jump_tpl');
         $template = $this->theme($template);
         
         $body = Msg::toSuccess($msg, $url, $wait, $template);
@@ -54,7 +54,7 @@ abstract class Controller
      */
     public function errorHtml($response, $msg = "失败", $url = "", $wait = 3)
     {
-        $template = Gable::$di->get('config')->get('app.jump_tpl');;
+        $template = Gable::$di->get('config')->get('app.jump_tpl');
         $template = $this->theme($template);
         
         $body = Msg::toError($msg, $url, $wait, $template);

@@ -6,7 +6,7 @@ namespace App\Board;
 
 use Psr\Http\Message\UriInterface;
 
-use App\Gable\Gable;
+use App\Board\Gable;
 
 /**
  * 路由

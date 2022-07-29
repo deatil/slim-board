@@ -1,0 +1,16 @@
+<!-- Fonts and icons -->
+<script src='{{ admin_assets("js/plugin/webfont/webfont.min.js") }}'></script>
+<script>
+    WebFont.load({
+        google: {"families":["Open+Sans:300,400,600,700"]},
+        custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"], urls: ['{{ admin_assets("css/fonts.css") }}']},
+        active: function() {
+            sessionStorage.fonts = true;
+        }
+    });
+</script>
+
+<!-- CSS Files -->
+<link rel="stylesheet" href='{{ admin_assets("css/bootstrap.min.css") }}'>
+<link rel="stylesheet" href='{{ admin_assets("css/azzara.min.css") }}'>
+<link rel="stylesheet" href='{{ admin_assets("css/app.css") }}'>

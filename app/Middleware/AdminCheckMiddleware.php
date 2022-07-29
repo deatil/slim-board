@@ -10,7 +10,8 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 use App\Board\Msg;
-use App\Auth\User as AuthUser;
+use App\Board\Gable;
+use App\Board\Auth\User as AuthUser;
 
 /**
  * 管理员验证
@@ -31,16 +32,30 @@ class AdminCheckMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = $handler->handle($request);
+        $response = Gable::$app->getResponseFactory()->createResponse(200);
         
         $isAdmin = AuthUser::isAdmin();
         if (! $isAdmin) {
-            $body = Msg::toError("你没有权限访问该页面");
+            $template = $this->template();
+            
+            $body = Msg::toError("你没有权限访问该页面", "", 3, $template);
             
             return $response->withBody($body);
         }
         
-        return $response;
+        return $handler->handle($request);
     }
-
+    
+    /**
+     * 模板
+     */
+    public function template()
+    {
+        $config = Gable::$di->get('config');
+        
+        $theme = $config->get("app.admin_theme");
+        $template = $config->get('app.jump_tpl');
+        
+        return "admin/{$theme}/" . ltrim($template, "/");
+    }
 }

@@ -24,33 +24,39 @@ class __TwigTemplate_d58cee641b52ac28b34687929503896c extends Template
 
         $this->source = $this->getSourceContext();
 
-        $this->parent = false;
-
         $this->blocks = [
+            'title' => [$this, 'block_title'],
+            'content' => [$this, 'block_content'],
         ];
+    }
+
+    protected function doGetParent(array $context)
+    {
+        // line 1
+        return "board/timi/common/base.html";
     }
 
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 1
-        echo "index
+        $this->parent = $this->loadTemplate("board/timi/common/base.html", "board/timi/index/index.html", 1);
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
 
+    // line 3
+    public function block_title($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        echo "更新信息";
+    }
+
+    // line 5
+    public function block_content($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        // line 6
+        echo "index
 ";
-        // line 3
-        if (($this->env->getRuntime('App\Twig\TwigRuntimeExtension')->user() != "")) {
-            // line 4
-            echo "    <a href=\"";
-            echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("board.auth-logout"), "html", null, true);
-            echo "\">退出登录</a>
-";
-        } else {
-            // line 6
-            echo "    <a href=\"";
-            echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("board.auth-login"), "html", null, true);
-            echo "\">马上登录</a>
-";
-        }
     }
 
     public function getTemplateName()
@@ -65,7 +71,7 @@ class __TwigTemplate_d58cee641b52ac28b34687929503896c extends Template
 
     public function getDebugInfo()
     {
-        return array (  49 => 6,  43 => 4,  41 => 3,  37 => 1,);
+        return array (  58 => 6,  54 => 5,  47 => 3,  36 => 1,);
     }
 
     public function getSourceContext()

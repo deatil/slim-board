@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Gable\Gable;
+use App\Board\Orm;
 
 /**
  * 用户
@@ -15,11 +15,31 @@ use App\Gable\Gable;
 class User
 {
     /**
+     * 列表
+     */
+    public static function getList($limit = [0, 5], array $userWhere = [])
+    {
+        $where = [
+            "LIMIT" => $limit,
+            "ORDER" => [
+                "add_time" => "DESC",
+            ],
+        ];
+        
+        // 合并条件
+        $where = array_merge($where, $userWhere);
+        
+        $data = Orm::select("user", [], "*", $where);
+
+        return $data;
+    }
+
+    /**
      * 信息
      */
     public static function getInfoById($id)
     {
-        $data = Gable::db()->get("user",  "*", [
+        $data = Orm::get("user",  "*", [
             "id[=]" => $id
         ]);
 
@@ -31,7 +51,7 @@ class User
      */
     public static function getInfoByUsername($username)
     {
-        $data = Gable::db()->get("user",  "*", [
+        $data = Orm::get("user",  "*", [
             "username[=]" => $username,
         ]);
 
@@ -43,10 +63,35 @@ class User
      */
     public static function updateById($id, array $data = [])
     {
-        $data = Gable::db()->update("user",  $data, [
+        $data = Orm::update("user",  $data, [
             "id[=]" => $id,
         ]);
 
-        return $data->rowCount();
+        return $data;
     }
+    
+    /**
+     * 添加数据
+     */
+    public static function create(array $data = [])
+    {
+        $ret = Orm::insert("user", $data);
+
+        return $ret;
+    }
+
+    /**
+     * 更改信息
+     */
+    public static function deleteById($id)
+    {
+        $data = Orm::delete("user", [
+            "AND" => [
+                "id[=]" => $id,
+            ]
+        ]);
+
+        return $data;
+    }
+
 }

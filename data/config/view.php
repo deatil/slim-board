@@ -21,5 +21,7 @@ return [
     // 静态文件根目录
     'assets' => '/static',
     // 静态文件根目录
+    'board_assets' => '/static/board',
+    // 静态文件根目录
     'admin_assets' => '/static/admin',
 ];

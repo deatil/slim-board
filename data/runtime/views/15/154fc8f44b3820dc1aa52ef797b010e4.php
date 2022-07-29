@@ -24,33 +24,43 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
 
         $this->source = $this->getSourceContext();
 
-        $this->parent = false;
-
         $this->blocks = [
+            'title' => [$this, 'block_title'],
+            'content' => [$this, 'block_content'],
+            'script' => [$this, 'block_script'],
         ];
+    }
+
+    protected function doGetParent(array $context)
+    {
+        // line 1
+        return "admin/board/common/base.html";
     }
 
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 1
-        echo "<!DOCTYPE html>
-<html lang=\"en\">
+        $this->parent = $this->loadTemplate("admin/board/common/base.html", "admin/board/profile/index.html", 1);
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
 
-<head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"renderer\" content=\"webkit\">
-    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0\">
-    <title>更新信息</title>
-</head>
+    // line 3
+    public function block_title($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        echo "更新信息";
+    }
 
-<body>
-    <div class=\"box\">
+    // line 5
+    public function block_content($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        // line 6
+        echo "    <div class=\"profile-box\">
         更新信息
         
         <a href=\"";
-        // line 16
+        // line 9
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.index"), "html", null, true);
         echo "\">返回首页</a>
 
@@ -62,8 +72,8 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
                 name=\"username\"
                 autocomplete=\"false\"
                 value=\"";
-        // line 25
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "username", [], "any", false, false, false, 25), "html", null, true);
+        // line 18
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "username", [], "any", false, false, false, 18), "html", null, true);
         echo "\"
                 id=\"username\">
             <br>
@@ -72,19 +82,10 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
             <input type=\"text\" 
                 name=\"nickname\"
                 value=\"";
-        // line 32
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "nickname", [], "any", false, false, false, 32), "html", null, true);
+        // line 25
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "nickname", [], "any", false, false, false, 25), "html", null, true);
         echo "\"
                 id=\"nickname\">
-            <br>
-            
-            账号密码:<br>
-            <input type=\"password\" 
-                name=\"password\"
-                autocomplete=\"false\"
-                id=\"password\">
-            <br>
-            留空不更新密码
             <br>
             
             个性签名:<br>
@@ -93,8 +94,8 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
                 placeholder=\"自定义签名\" 
                 id=\"sign\" 
                 style=\"height: 150px;\">";
-        // line 50
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "sign", [], "any", false, false, false, 50), "html", null, true);
+        // line 34
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, ($context["data"] ?? null), "sign", [], "any", false, false, false, 34), "html", null, true);
         echo "</textarea>
             <br>
             
@@ -102,12 +103,19 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
         </form> 
 
     </div>
-    <script src='";
-        // line 57
+";
+    }
+
+    // line 43
+    public function block_script($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        // line 44
+        echo "    <script src='";
         echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/jquery-3.4.1.min.js"), "html", null, true);
         echo "' type=\"text/javascript\"></script>
     <script src='";
-        // line 58
+        // line 45
         echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/layer/layer.js"), "html", null, true);
         echo "' type=\"text/javascript\"></script>
     <script type=\"text/javascript\">
@@ -121,17 +129,15 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
 
             var username = \$(\"#username\").val();
             var nickname = \$(\"#nickname\").val();
-            var password = \$(\"#password\").val();
             var sign = \$(\"#sign\").val();
 
             var url = \"";
-        // line 73
+        // line 59
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.profile-save"), "html", null, true);
         echo "\";
             \$.post(url, {
                 username: username,
                 nickname: nickname,
-                password: password,
                 sign: sign,
             }, function(data) {
                 if (data.code == 0) {
@@ -139,7 +145,7 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
                     
                     setTimeout(function() {
                         window.location.href = \"";
-        // line 84
+        // line 69
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.profile"), "html", null, true);
         echo "\";
                     }, 1500);
@@ -152,10 +158,6 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
         });
     })(jQuery);
     </script>
-
-</body>
-</html>
-
 ";
     }
 
@@ -171,7 +173,7 @@ class __TwigTemplate_8bfed24b699ddd111a30ddde6b1c4e1e extends Template
 
     public function getDebugInfo()
     {
-        return array (  143 => 84,  129 => 73,  111 => 58,  107 => 57,  97 => 50,  76 => 32,  66 => 25,  54 => 16,  37 => 1,);
+        return array (  149 => 69,  136 => 59,  119 => 45,  114 => 44,  110 => 43,  98 => 34,  86 => 25,  76 => 18,  64 => 9,  59 => 6,  55 => 5,  48 => 3,  37 => 1,);
     }
 
     public function getSourceContext()

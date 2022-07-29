@@ -7,10 +7,10 @@ namespace App\Controller\Board;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
-use App\Gable\Gable;
+use App\Board\Gable;
 use App\Board\Auth as BoardAuth;
 use App\Board\Validation;
-use App\Auth\Auth as AuthTool;
+use App\Board\Auth\Auth as AuthTool;
 use App\Model\User as UserModel;
 
 /**

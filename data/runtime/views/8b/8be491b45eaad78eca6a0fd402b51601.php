@@ -101,11 +101,11 @@ class __TwigTemplate_1edf6a7542ddb9f35a1fe494821edb46 extends Template
     </div>
     <script src='";
         // line 60
-        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/jquery-3.4.1.min.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->boardAssets("js/jquery-3.4.1.min.js"), "html", null, true);
         echo "' type=\"text/javascript\"></script>
     <script src='";
         // line 61
-        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/layer/layer.js"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->boardAssets("js/layer/layer.js"), "html", null, true);
         echo "' type=\"text/javascript\"></script>
     <script type=\"text/javascript\">
     (function(\$) {

@@ -24,74 +24,115 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
 
         $this->source = $this->getSourceContext();
 
-        $this->parent = false;
-
         $this->blocks = [
+            'title' => [$this, 'block_title'],
+            'body' => [$this, 'block_body'],
         ];
+    }
+
+    protected function doGetParent(array $context)
+    {
+        // line 1
+        return "admin/board/common/base.html";
     }
 
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 1
-        echo "<!DOCTYPE html>
-<html lang=\"en\">
+        $this->parent = $this->loadTemplate("admin/board/common/base.html", "admin/board/auth/login.html", 1);
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
 
-<head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"renderer\" content=\"webkit\">
-    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0\">
-    <title>管理登录</title>
+    // line 3
+    public function block_title($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        echo "管理登录";
+    }
+
+    // line 5
+    public function block_body($context, array $blocks = [])
+    {
+        $macros = $this->macros;
+        // line 6
+        echo "<body class=\"login\">
     <style>
     .login-captcha {
+        position: relative;
+    }
+    .login-captcha-input {
+        width: 170px;
+    }
+    .login-captcha-img {
         cursor: pointer;
+        position: absolute;
+        top: 37px;
+        right: 11px;
+        border-radius: .25rem;
     }
     </style>
-</head>
 
-<body>
-    <div class=\"box\">
-        管理登录
-
-        <hr />
-
-        <form method=\"post\">
-            密码:<br>
-            <input type=\"password\" 
-                name=\"password\"
-                id=\"password\">
-            <br>
-            
-            验证码:<br>
-            <input type=\"text\" 
-                name=\"captcha\"
-                id=\"captcha\">
-            <br>
-            
-            <img src=\"";
-        // line 36
+    <div class=\"wrapper wrapper-login\">
+        <div class=\"container container-login animated fadeIn\">
+            <h3 class=\"text-center\">管理登录</h3>
+            <div class=\"login-form\">
+                <div class=\"form-group\">
+                    <label for=\"password\" class=\"placeholder\"><b>密码</b></label>
+                    <div class=\"position-relative\">
+                        <input id=\"password\" name=\"password\" type=\"password\" class=\"form-control\" required>
+                        <div class=\"show-password\">
+                            <i class=\"flaticon-interface\"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class=\"form-group login-captcha\">
+                    <label for=\"captcha\" class=\"placeholder\"><b>验证码</b></label>
+                    <input id=\"captcha\" name=\"captcha\" type=\"text\" class=\"form-control login-captcha-input\" required>
+                    <img src=\"";
+        // line 40
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("img/captcha.jpg"), "html", null, true);
+        echo "\" 
+                        data-src=\"";
+        // line 41
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.auth-captcha"), "html", null, true);
         echo "\" 
-                data-src=\"";
-        // line 37
-        echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.auth-captcha"), "html", null, true);
-        echo "\" 
-                title=\"刷新验证码\"
-                class=\"login-captcha js-captcha-refresh\"/>
-            <br>
-            
-            <button type=\"button\" class=\"layui-btn js-login-button\">登录</button>
-        </form> 
-
+                        title=\"刷新验证码\"
+                        class=\"login-captcha-img js-captcha-refresh\"/>
+                    <br>
+                </div>
+                
+                <div class=\"form-group form-action\">
+                    <a href=\"javascript:;\" class=\"btn btn-primary col-md-5 mt-3 mt-sm-0 fw-bold js-login-button\">登录</a>
+                </div>
+            </div>
+        </div>
     </div>
+    
     <script src='";
-        // line 46
-        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/jquery-3.4.1.min.js"), "html", null, true);
-        echo "' type=\"text/javascript\"></script>
+        // line 54
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/core/jquery.3.2.1.min.js"), "html", null, true);
+        echo "'></script>
     <script src='";
-        // line 47
-        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->assets("js/layer/layer.js"), "html", null, true);
+        // line 55
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"), "html", null, true);
+        echo "'></script>
+    <script src='";
+        // line 56
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/core/popper.min.js"), "html", null, true);
+        echo "'></script>
+    <script src='";
+        // line 57
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/core/bootstrap.min.js"), "html", null, true);
+        echo "'></script>
+    <script src='";
+        // line 58
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/ready.js"), "html", null, true);
+        echo "'></script>
+    
+    <script src='";
+        // line 60
+        echo twig_escape_filter($this->env, $this->env->getRuntime('App\Twig\TwigRuntimeExtension')->adminAssets("js/layer/layer.js"), "html", null, true);
         echo "' type=\"text/javascript\"></script>
     <script type=\"text/javascript\">
     (function(\$) {
@@ -106,6 +147,10 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
             \$(this).attr(\"src\", url);
         });
         
+        setTimeout(function() {
+            \$(\".js-captcha-refresh\").trigger(\"click\");
+        }, 50);
+        
         // 登录
         \$(\".js-login-button\").click(function(e) {
             e.stopPropagation;
@@ -115,7 +160,7 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
             var captcha = \$(\"#captcha\").val();
 
             var url = \"";
-        // line 69
+        // line 86
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.auth-login-check"), "html", null, true);
         echo "\";
             \$.post(url, {
@@ -127,7 +172,7 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
                     
                     setTimeout(function() {
                         window.location.href = \"";
-        // line 78
+        // line 95
         echo twig_escape_filter($this->env, $this->env->getRuntime('Slim\Views\TwigRuntimeExtension')->urlFor("admin.index"), "html", null, true);
         echo "\";
                     }, 1500);
@@ -142,7 +187,6 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
     </script>
 
 </body>
-</html>
 
 ";
     }
@@ -159,7 +203,7 @@ class __TwigTemplate_306ba444b62e9ff45101b6c5bc1bf1a0 extends Template
 
     public function getDebugInfo()
     {
-        return array (  131 => 78,  119 => 69,  94 => 47,  90 => 46,  78 => 37,  74 => 36,  37 => 1,);
+        return array (  176 => 95,  164 => 86,  135 => 60,  130 => 58,  126 => 57,  122 => 56,  118 => 55,  114 => 54,  98 => 41,  94 => 40,  58 => 6,  54 => 5,  47 => 3,  36 => 1,);
     }
 
     public function getSourceContext()

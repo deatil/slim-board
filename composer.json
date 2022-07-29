@@ -43,7 +43,7 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Support/helper.php"
+            "app/Board/helper.php"
         ]
     },
     "repositories": {

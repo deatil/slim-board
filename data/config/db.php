@@ -9,4 +9,12 @@ return [
     'password' => '123456',
     'charset' => 'utf8mb4',
     'prefix' => 'board_',
+    
+    // 调试
+    'debug' => false,
+    
+    // PDO::ERRMODE_SILENT (default) 
+    // | PDO::ERRMODE_WARNING 
+    // | PDO::ERRMODE_EXCEPTION
+    'error' => PDO::ERRMODE_EXCEPTION,
 ];

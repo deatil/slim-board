@@ -5,9 +5,9 @@ use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
 use App\Route\Route;
-use App\Gable\Gable;
-use App\Bootstrap\Bootstrap;
-use App\Bootstrap\Handler;
+use App\Board\Gable;
+use App\Board\Bootstrap\Bootstrap;
+use App\Board\Bootstrap\Handler;
 
 require __DIR__ . '/../vendor/autoload.php';
 
