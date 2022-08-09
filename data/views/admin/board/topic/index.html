@@ -1,0 +1,294 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}话题管理{% endblock %}
+
+{% block content %}
+<style>
+.nodata {
+    text-align: center;
+    padding: 15px;
+    color: #c0c3c5;
+}
+.table tr {
+    vertical-align: middle;
+}
+.table thead tr {
+    background: #ebeff1;
+}
+</style>
+
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">话题列表</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.topic.index') }}">话题管理</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:;">话题列表</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            条件搜索
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="get">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="input-group my-1">
+                                        <span class="input-group-text" id="input-keyword">关键字</span>
+                                        <input type="text" 
+                                            name="keyword"
+                                            value="{{ keyword }}"
+                                            class="form-control" 
+                                            placeholder="" 
+                                            aria-label="keyword" 
+                                            aria-describedby="input-keyword">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <div class="input-group my-1">
+                                        <span class="input-group-text" 
+                                            id="input-is_top">置顶</span>
+                                        <select name="is_top"
+                                            class="form-control" 
+                                            aria-label="is_top"
+                                            aria-describedby="input-is_top"
+                                        >
+                                            <option value="">全部</option>
+                                            <option value="1" {% if is_top== "1" %}selected=""{% endif %}>启用</option>
+                                            <option value="2" {% if is_top== "2" %}selected=""{% endif %}>禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <div class="input-group my-1">
+                                        <span class="input-group-text" 
+                                            id="input-is_digest">精华</span>
+                                        <select name="is_digest"
+                                            class="form-control" 
+                                            aria-label="is_digest"
+                                            aria-describedby="input-is_digest"
+                                        >
+                                            <option value="">全部</option>
+                                            <option value="1" {% if is_digest== "1" %}selected=""{% endif %}>启用</option>
+                                            <option value="2" {% if is_digest== "2" %}selected=""{% endif %}>禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <div class="input-group my-1">
+                                        <span class="input-group-text" 
+                                            id="input-is_close">关闭</span>
+                                        <select name="is_close"
+                                            class="form-control" 
+                                            aria-label="is_close"
+                                            aria-describedby="input-is_close"
+                                        >
+                                            <option value="">全部</option>
+                                            <option value="1" {% if is_close== "1" %}selected=""{% endif %}>是</option>
+                                            <option value="2" {% if is_close== "2" %}selected=""{% endif %}>否</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <div class="input-group my-1">
+                                        <span class="input-group-text" id="input-status">状态</span>
+                                        <select name="status"
+                                            class="form-control" 
+                                            aria-label="status"
+                                            aria-describedby="input-status"
+                                        >
+                                            <option value="">全部</option>
+                                            <option value="1" {% if status== "1" %}selected=""{% endif %}>启用</option>
+                                            <option value="2" {% if status== "2" %}selected=""{% endif %}>禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-auto">
+                                    <button type="submit" 
+                                        class="btn btn-primary my-1"
+                                    >
+                                        <i class="fa fa-search me-2"></i>
+                                        搜 索
+                                    </button>
+                                </div>
+                            </div>
+                            
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            话题列表
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-head-bg-success">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>标题</th>
+                                        <th>数据</th>
+                                        <th>添加时间</th>
+                                        <th class="text-center">状态</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if list %}
+                                        {% for item in list %}
+                                            <tr>
+                                                <th scope="row" width="60" class="text-center">
+                                                    {{ item.id }}
+                                                </th>
+                                                <td>
+                                                    {% if item.is_top == 1 %}<span class="text-secondary">[顶]</span>{% endif %}
+                                                    {% if item.is_digest == 1 %}<span class="text-success">[精]</span>{% endif %}
+                                                    {% if item.is_close == 1 %}<span class="text-danger">[关]</span>{% endif %}
+                                                    
+                                                    {{ item.title }}
+                                                    
+                                                    <br />
+                                                    
+                                                    <span class="text-muted">
+                                                        作者: {{ item.user.nickname }}
+                                                    </span>
+                                                </td>
+                                                <td width="110">
+                                                    浏览: {{ item.views }}
+                                                    <br />
+                                                    回复: {{ item.replys }}
+                                                </td>
+                                                <td width="170">
+                                                    <span title="添加时间">
+                                                        <i class="far fa-clock text-muted"></i>
+                                                        {{ item.add_time|date("Y-m-d H:i:s") }}
+                                                    </span>
+                                                    
+                                                    {% if item.last_reply %}
+                                                        <span title="最后回复时间">
+                                                            <i class="far fa-comment text-muted"></i>
+                                                            {{ item.last_reply|date("Y-m-d H:i:s") }}
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td width="45">
+                                                    {% if item.status == 1 %}
+                                                        <span class="badge bg-success text-white">启用</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger text-white">禁用</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td width="165" class="text-center">
+                                                    <a class="btn btn-primary btn-xs" 
+                                                        href="{{ url_for('admin.topic.edit', {'id': item.id}) }}" 
+                                                    >
+                                                        <i class="fa fa-edit"></i>
+                                                        编辑
+                                                    </a>
+                                                    
+                                                    <a href="javascript:;" 
+                                                        class="btn btn-danger btn-xs js-delete-btn"
+                                                        data-url="{{ url_for('admin.topic.delete', {'id': item.id}) }}"
+                                                    >
+                                                        <i class="fa fa-times"></i>
+                                                        删除
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6">
+                                                <div class="nodata">
+                                                    无数据
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                {{ pageHtml | raw }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-topic").addClass("active submenu");
+    $(".nav-item.board-topic > .collapse").addClass("show");
+    $(".nav-item.board-topic .board-topic-list").addClass("active");
+    
+    // 删除
+    $('.js-delete-btn').click(function() {
+        var url = $(this).data('url');
+        
+        layer.confirm('您确定要删除该话题吗？', {
+            offset: 'c',
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {}, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        offset: 'c',
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

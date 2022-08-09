@@ -22,12 +22,16 @@
         "ext-json": "*",
         "bryanjhv/slim-session": "~4.0",
         "catfan/medoo": "^2.1",
+        "gregwar/captcha": "^1.1",
+        "inhere/php-validate": "^2.8",
         "monolog/monolog": "^2.7",
+        "nesbot/carbon": "^2.59",
         "php-di/php-di": "^6.4",
         "ramsey/uuid": "^4.3",
         "slim/psr7": "^1.5",
         "slim/slim": "^4.10",
-        "slim/twig-view": "^3.3"
+        "slim/twig-view": "^3.3",
+        "zeuxisoo/slim-whoops": "0.7.*"
     },
     "config": {
         "process-timeout": 0,
@@ -37,7 +41,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "app/Board/helper.php"
+        ]
     },
     "repositories": {
         "packagist": {

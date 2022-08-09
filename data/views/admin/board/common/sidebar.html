@@ -1,0 +1,73 @@
+<!-- Sidebar -->
+<div class="sidebar">
+    
+    <div class="sidebar-background"></div>
+    <div class="sidebar-wrapper scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav">
+                <li class="nav-item board-index">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="fas fa-home"></i>
+                        <p>控制台</p>
+                    </a>
+                </li>
+                
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">常规管理</h4>
+                </li>
+                <li class="nav-item board-cate">
+                    <a href="{{ url_for('admin.board.index') }}">
+                        <i class="fas fa-list"></i>
+                        <p>分类管理</p>
+                    </a>
+                </li>
+                <li class="nav-item board-topic">
+                    <a data-toggle="collapse" href="#topic">
+                        <i class="fas fa-comment-alt"></i>
+                        <p>话题管理</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="topic">
+                        <ul class="nav nav-collapse">
+                            <li class="board-topic-list">
+                                <a href="{{ url_for('admin.topic.index') }}">
+                                    <span class="sub-item">话题列表</span>
+                                </a>
+                            </li>
+                            <li class="board-topic-reply">
+                                <a href="{{ url_for('admin.reply.index') }}">
+                                    <span class="sub-item">回复管理</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item board-user">
+                    <a href="{{ url_for('admin.user.index') }}">
+                        <i class="fas fa-user"></i>
+                        <p>账号管理</p>
+                    </a>
+                </li>
+                
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">系统管理</h4>
+                </li>
+                <li class="nav-item board-setting">
+                    <a href="{{ url_for('admin.setting.index') }}">
+                        <i class="fas fa-cog"></i>
+                        <p>网站设置</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Sidebar -->

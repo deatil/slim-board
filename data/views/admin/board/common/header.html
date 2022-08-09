@@ -1,0 +1,76 @@
+<div class="main-header" data-background-color="purple">
+    <!-- Logo Header -->
+    <div class="logo-header">
+        
+        <a href="{{ url_for('admin.index') }}" class="logo">
+            <img src='{{ admin_assets("img/logo.svg") }}' 
+                alt="slim board" 
+                class="navbar-brand"
+                style="height:25px;">
+        </a>
+        <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+                <i class="fa fa-bars"></i>
+            </span>
+        </button>
+        <button class="topbar-toggler more"><i class="fa fa-ellipsis-v"></i></button>
+        <div class="navbar-minimize">
+            <button class="btn btn-minimize btn-rounded">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </div>
+    <!-- End Logo Header -->
+
+    <!-- Navbar Header -->
+    <nav class="navbar navbar-header navbar-expand-lg">
+        
+        <div class="container-fluid">
+
+            <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+
+                <li class="nav-item dropdown hidden-caret">
+                    <a class="nav-link" 
+                        href="{{ url_for('board.index') }}" 
+                        target="_blank"
+                        role="button">
+                        <i class="fa fa-home"></i>
+                        首页
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown hidden-caret">
+                    <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <div class="avatar-sm">
+                            <img src='{{ avatar_url(user()["avatar"]) }}' alt="{{ user()['nickname'] }}" class="avatar-img rounded-circle">
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                        <li>
+                            <div class="user-box">
+                                <div class="avatar-lg">
+                                    <img src='{{ avatar_url(user()["avatar"]) }}' alt="{{ user()['nickname'] }}" class="avatar-img rounded">
+                                </div>
+                                <div class="u-text">
+                                    <h4>{{ user()['nickname'] }}</h4>
+                                    <p class="text-muted user-sign">
+                                        登录时间: 
+                                        {{ user()['login_time']|date("Y-m-d H:i:s") }}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item js-user-logout" 
+                                href="javascript:;" 
+                                data-href="{{ url_for('admin.auth-logout') }}">退出登录</a>
+                        </li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+</div>

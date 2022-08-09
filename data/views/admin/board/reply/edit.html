@@ -1,0 +1,127 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}编辑回复{% endblock %}
+
+{% block content %}
+<style>
+.form-control .form-radio-label {
+    margin-bottom: 0;
+}
+</style>
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">编辑回复</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.topic.index') }}">话题管理</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:;">回复管理</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                
+                <form method="post" class="reply-form">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                编辑回复
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check">
+                                <label>状态</label>
+                                
+                                <div class="form-control">
+                                    <label class="form-radio-label">
+                                        <input class="form-radio-input board-status" 
+                                            type="radio" 
+                                            name="status" 
+                                            value="1" 
+                                            {% if data.status == 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">启用</span>
+                                    </label>
+                                    <label class="form-radio-label ml-3">
+                                        <input class="form-radio-input board-status" 
+                                            type="radio" 
+                                            name="status" 
+                                            value="0"
+                                            {% if data.status != 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">禁用</span>
+                                    </label>
+                                </div>
+                                <small id="statusHelp" class="form-text text-muted">
+                                    设置回复的状态
+                                </small>
+                            </div>
+
+                        </div>
+                        
+                        <div class="card-action">
+                            <button type="button" class="btn btn-success js-save-button">确认修改</button>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-topic").addClass("active submenu");
+    $(".nav-item.board-topic > .collapse").addClass("show");
+    $(".nav-item.board-topic .board-topic-reply").addClass("active");
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var data = $(".reply-form").serialize();
+
+        var url = "{{ url_for('admin.reply.edit-save', {'id': data.id}) }}";
+        $.post(url, data, function(data) {
+            if (data.code == 0) {
+                layer.msg("编辑成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+});
+</script>
+{% endblock %}

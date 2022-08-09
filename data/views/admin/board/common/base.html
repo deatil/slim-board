@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <title>{% block title %}{% endblock %} - Board System</title>
+    {% block head %}
+        {% include 'admin/board/common/head.html' %}
+    {% endblock %}
+</head>
+
+{% block body %}
+
+<body>
+    <div class="wrapper">
+        {% block header %}
+            {% include 'admin/board/common/header.html' %}
+        {% endblock %}
+            
+        {% block sidebar %}
+            {% include 'admin/board/common/sidebar.html' %}
+        {% endblock %}
+        
+        <div class="main-panel">
+            {% block content %}{% endblock %}
+        
+            {% block footer %}
+                {% include 'admin/board/common/footer.html' %}
+            {% endblock %}
+        </div>
+            
+        {% block settings %}
+            {% include 'admin/board/common/settings.html' %}
+        {% endblock %}
+        
+    </div>
+    
+    {% block script_before %}{% endblock %}
+    
+    {% block script %}
+        <script src='{{ admin_assets("js/core/jquery.3.2.1.min.js") }}'></script>
+        <script src='{{ admin_assets("js/core/popper.min.js") }}'></script>
+        <script src='{{ admin_assets("js/core/bootstrap.min.js") }}'></script>
+        
+        <script src='{{ admin_assets("js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js") }}'></script>
+        <script src='{{ admin_assets("js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js") }}'></script>
+
+        <!-- jQuery Scrollbar -->
+        <script src='{{ admin_assets("js/plugin/jquery-scrollbar/jquery.scrollbar.min.js") }}'></script>
+        
+        {% block script_plugin %}{% endblock %}
+        
+        <script src='{{ admin_assets("js/ready.js") }}'></script>
+        <script src='{{ admin_assets("js/layer/layer.js") }}' type="text/javascript"></script>
+        
+        <script src='{{ admin_assets("js/setting.js") }}'></script>
+        
+        {% block script_append %}{% endblock %}
+    {% endblock %}
+    
+    {% block script_after %}{% endblock %}
+</body>
+
+{% endblock %}
+
+</html>
+

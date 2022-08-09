@@ -1,0 +1,98 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}添加分类{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">添加分类</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.board.index') }}">分类管理</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+            
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            添加分类
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="name">名称</label>
+                            <input type="text" class="form-control" id="name" placeholder="分类的名称">
+                            <small id="nameHelp" class="form-text text-muted">
+                                设置分类的名称
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="slug">标识</label>
+                            <input type="text" class="form-control" id="slug" placeholder="分类的标识">
+                            <small id="slugHelp" class="form-text text-muted">
+                                设置分类的标识，必须是没有添加过的
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="card-action">
+                        <button class="btn btn-success js-save-button">确认添加</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-cate").addClass("active");
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var name = $("#name").val();
+        var slug = $("#slug").val();
+
+        var url = "{{ url_for('admin.board.add-save') }}";
+        $.post(url, {
+            name: name,
+            slug: slug,
+        }, function(data) {
+            if (data.code == 0) {
+                layer.msg("添加成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+});
+</script>
+{% endblock %}

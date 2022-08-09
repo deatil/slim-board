@@ -1,0 +1,207 @@
+.custom-template {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -325px;
+    width: 325px;
+    height: max-content;
+    display: block;
+    z-index: 1;
+    background: #ffffff;
+    transition: all .3s;
+    z-index: 1003;
+    box-shadow: -1px 1px 20px rgba(69, 65, 78, 0.15);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition: all .5s;
+}
+
+.custom-template.open {
+    right: 0px;
+}
+
+.custom-template .custom-toggle {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background: rgb(88, 103, 221);
+    top: 50%;
+    left: -45px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 1px solid #177dff;
+    cursor: pointer;
+    color: #ffffff;
+    box-shadow: -5px 5px 20px rgba(69, 65, 78, 0.21);
+}
+
+.custom-template .custom-toggle i {
+    font-size: 20px;
+    /*animation: 1.3s spin linear infinite;*/
+}
+
+.custom-template .title{
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    border-top-left-radius: 5px;
+    border-bottom: 1px solid #ebedf2;
+    background: #5867dd;
+}
+
+.custom-template .custom-content{
+    padding: 20px 15px;
+    overflow: auto;
+}
+
+.custom-template .switcher {
+    padding: 5px 0;
+}
+
+.custom-template .switch-block h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    line-height: 1.3;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+.custom-template .btnSwitch {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.custom-template .btnSwitch button {
+    border: 0px;
+    height: 20px;
+    width: 20px;
+    outline: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid #eee;
+    position: relative;
+    transition: all .2s;
+}
+
+.custom-template .btnSwitch button:hover{
+    border-color: #0bf;
+}
+
+.custom-template .btnSwitch button.selected{
+    border-color: #0bf;
+}
+
+.custom-template .img-pick {
+    padding: 4px;
+    min-height: 100px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-template .img-pick img {
+    height: 100%;
+    height: 100px;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid transparent;
+}
+
+.custom-template .img-pick:hover img, .custom-template .img-pick.active img{
+    border-color: #177dff;
+}
+
+.form-show-notify .form-control{
+    margin-bottom: 15px;
+}
+
+.form-show-notify label{
+    padding-top: 0.65rem;
+}
+
+#instructions li{
+    padding: 5px 0;
+}
+
+.btnSwitch button[data-color="default"] {
+    background-color: #fff;
+}
+.btnSwitch button[data-color="black"] {
+    background-color: #191919;
+}
+.btnSwitch button[data-color="dark"] {
+    background-color: #282a3c;
+}
+.btnSwitch button[data-color="blue"] {
+    background-color: #177dff;
+}
+.btnSwitch button[data-color="purple"] {
+    background-color: #716aca;
+}
+.btnSwitch button[data-color="light-blue"] {
+    background-color: #05b4d8;
+}
+.btnSwitch button[data-color="green"] {
+    background-color: #35cd3a;
+}
+.btnSwitch button[data-color="orange"] {
+    background-color: #ffa534;
+}
+.btnSwitch button[data-color="red"] {
+    background-color: #f3545d;
+}
+.btnSwitch button[data-color="bg1"] {
+    background-color: #fafafa;
+}
+.btnSwitch button[data-color="bg2"] {
+    background-color: #fff;
+}
+.btnSwitch button[data-color="bg3"] {
+    background-color: #f1f1f1;
+}
+
+@media screen and (max-width: 576px){
+    .custom-template .custom-content {
+        overflow: auto;
+    }
+    .form-show-notify > .text-right, .form-show-validation > .text-right {
+        text-align: left !important;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .custom-template {
+        width: 85% !important;
+        right: -85%;
+    }
+}
+
+.user-sign {
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  display: -moz-box;
+  -moz-line-clamp: 2;
+  -moz-box-orient: vertical;
+
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: normal;
+  overflow: hidden;
+}
+.user-box .u-text {
+    width: 10rem;
+}

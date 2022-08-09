@@ -1,0 +1,251 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}编辑话题{% endblock %}
+
+{% block content %}
+<style>
+.form-control .form-radio-label {
+    margin-bottom: 0;
+}
+</style>
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">编辑话题</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.topic.index') }}">话题管理</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:;">话题列表</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                
+                <form method="post" class="topic-form">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                编辑话题
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="board_id">所属分类</label>
+                                <select class="form-control" 
+                                    id="board_id"
+                                    name="board_id" 
+                                >
+                                    {% for board in boards %}
+                                        <option value="{{ board.id }}" {% if board.id == data.board_id %}selected=""{% endif %}>{{ board.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="form-text text-muted">
+                                    设置话题的所属分类
+                                </small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="title">标题</label>
+                                <input type="text" 
+                                    class="form-control" 
+                                    id="title" 
+                                    name="title" 
+                                    value="{{ data.title }}"
+                                    placeholder="话题的标题">
+                                <small class="form-text text-muted">
+                                    设置话题的标题
+                                </small>
+                            </div>
+                            
+                            <div class="form-check">
+                                <label>置顶话题</label>
+                                
+                                <div class="form-control">
+                                    <label class="form-radio-label">
+                                        <input class="form-radio-input board-is_top" 
+                                            type="radio" 
+                                            name="is_top" 
+                                            value="1" 
+                                            {% if data.is_top == 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">启用</span>
+                                    </label>
+                                    <label class="form-radio-label ml-3">
+                                        <input class="form-radio-input board-is_top" 
+                                            type="radio" 
+                                            name="is_top" 
+                                            value="0"
+                                            {% if data.is_top != 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">禁用</span>
+                                    </label>
+                                </div>
+                                <small id="statusHelp" class="form-text text-muted">
+                                    设置话题的置顶状态
+                                </small>
+                            </div>
+                            
+                            <div class="form-check">
+                                <label>精华贴设置</label>
+                                
+                                <div class="form-control">
+                                    <label class="form-radio-label">
+                                        <input class="form-radio-input board-is_digest" 
+                                            type="radio" 
+                                            name="is_digest" 
+                                            value="1" 
+                                            {% if data.is_digest == 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">启用</span>
+                                    </label>
+                                    <label class="form-radio-label ml-3">
+                                        <input class="form-radio-input board-is_digest" 
+                                            type="radio" 
+                                            name="is_digest" 
+                                            value="0"
+                                            {% if data.is_digest != 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">禁用</span>
+                                    </label>
+                                </div>
+                                <small id="statusHelp" class="form-text text-muted">
+                                    设置话题的精华状态
+                                </small>
+                            </div>
+                            
+                            <div class="form-check">
+                                <label>关闭话题</label>
+                                
+                                <div class="form-control">
+                                    <label class="form-radio-label">
+                                        <input class="form-radio-input board-is_close" 
+                                            type="radio" 
+                                            name="is_close" 
+                                            value="1" 
+                                            {% if data.is_close == 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">是</span>
+                                    </label>
+                                    <label class="form-radio-label ml-3">
+                                        <input class="form-radio-input board-is_close" 
+                                            type="radio" 
+                                            name="is_close" 
+                                            value="0"
+                                            {% if data.is_close != 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">否</span>
+                                    </label>
+                                </div>
+                                <small id="statusHelp" class="form-text text-muted">
+                                    设置话题的关闭状态
+                                </small>
+                            </div>
+                            
+                            <div class="form-check">
+                                <label>状态</label>
+                                
+                                <div class="form-control">
+                                    <label class="form-radio-label">
+                                        <input class="form-radio-input board-status" 
+                                            type="radio" 
+                                            name="status" 
+                                            value="1" 
+                                            {% if data.status == 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">启用</span>
+                                    </label>
+                                    <label class="form-radio-label ml-3">
+                                        <input class="form-radio-input board-status" 
+                                            type="radio" 
+                                            name="status" 
+                                            value="0"
+                                            {% if data.status != 1 %}
+                                            checked=""
+                                            {% endif %}
+                                            >
+                                        <span class="form-radio-sign">禁用</span>
+                                    </label>
+                                </div>
+                                <small id="statusHelp" class="form-text text-muted">
+                                    设置话题的使用状态
+                                </small>
+                            </div>
+
+                        </div>
+                        
+                        <div class="card-action">
+                            <button type="button" class="btn btn-success js-save-button">确认修改</button>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-topic").addClass("active submenu");
+    $(".nav-item.board-topic > .collapse").addClass("show");
+    $(".nav-item.board-topic .board-topic-list").addClass("active");
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var data = $(".topic-form").serialize();
+
+        var url = "{{ url_for('admin.topic.edit-save', {'id': data.id}) }}";
+        $.post(url, data, function(data) {
+            if (data.code == 0) {
+                layer.msg("编辑成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+});
+</script>
+{% endblock %}

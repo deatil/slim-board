@@ -1,0 +1,174 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}编辑分类{% endblock %}
+
+{% block content %}
+<style>
+.form-control .form-radio-label {
+    margin-bottom: 0;
+}
+</style>
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">编辑分类</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.board.index') }}">分类管理</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+            
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            编辑分类
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="name">名称</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="name" 
+                                value="{{ data.name }}"
+                                placeholder="分类的名称">
+                            <small id="nameHelp" class="form-text text-muted">
+                                设置分类的名称
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="slug">标识</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="slug" 
+                                value="{{ data.slug }}"
+                                placeholder="分类的标识">
+                            <small id="slugHelp" class="form-text text-muted">
+                                设置分类的标识，必须是没有添加过的
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="desc">描述</label>
+                            <textarea 
+                                class="form-control" 
+                                id="desc" 
+                                placeholder="分类的描述"
+                                rows="5">{{ data.desc }}</textarea>
+                            <small id="descHelp" class="form-text text-muted">
+                                设置分类的描述，可为空
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sort">排序</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="sort" 
+                                value="{{ data.sort }}"
+                                placeholder="分类的排序">
+                            <small id="sortHelp" class="form-text text-muted">
+                                设置分类的排序，值越大越靠前
+                            </small>
+                        </div>
+                        
+                        <div class="form-check">
+                            <label>状态</label>
+                            
+                            <div class="form-control">
+                                <label class="form-radio-label">
+                                    <input class="form-radio-input board-status" 
+                                        type="radio" 
+                                        name="status" 
+                                        value="1" 
+                                        {% if data.status == 1 %}
+                                        checked=""
+                                        {% endif %}
+                                        >
+                                    <span class="form-radio-sign">启用</span>
+                                </label>
+                                <label class="form-radio-label ml-3">
+                                    <input class="form-radio-input board-status" 
+                                        type="radio" 
+                                        name="status" 
+                                        value="0"
+                                        {% if data.status != 1 %}
+                                        checked=""
+                                        {% endif %}
+                                        >
+                                    <span class="form-radio-sign">禁用</span>
+                                </label>
+                            </div>
+                            <small id="statusHelp" class="form-text text-muted">
+                                设置分类的使用状态
+                            </small>
+                        </div>
+
+                    </div>
+                    
+                    <div class="card-action">
+                        <button class="btn btn-success js-save-button">确认修改</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-cate").addClass("active");
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var name = $("#name").val();
+        var slug = $("#slug").val();
+        var desc = $("#desc").val();
+        var sort = $("#sort").val();
+        var status = $("[name=status]:checked").val();
+
+        var url = "{{ url_for('admin.board.edit-save', {'id': data.id}) }}";
+        $.post(url, {
+            name: name,
+            slug: slug,
+            desc: desc,
+            sort: sort,
+            status: status,
+        }, function(data) {
+            if (data.code == 0) {
+                layer.msg("编辑成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+});
+</script>
+{% endblock %}

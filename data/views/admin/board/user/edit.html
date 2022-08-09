@@ -1,0 +1,205 @@
+{% extends "admin/board/common/base.html" %}
+
+{% block title %}编辑账号{% endblock %}
+
+{% block content %}
+<style>
+.form-control .form-radio-label {
+    margin-bottom: 0;
+}
+</style>
+<div class="content">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">编辑账号</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="{{ url_for('admin.index') }}">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin.user.index') }}">账号管理</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+            
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            编辑账号
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="username">名称</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="username" 
+                                value="{{ data.username }}"
+                                placeholder="账号的名称">
+                            <small id="usernameHelp" class="form-text text-muted">
+                                设置账号的名称，用来登录。使用大小写字母、数字、下划线及其组合
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nickname">昵称</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="nickname" 
+                                value="{{ data.nickname }}"
+                                placeholder="账号的昵称">
+                            <small id="nicknameHelp" class="form-text text-muted">
+                                设置账号的昵称
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sign">个性签名</label>
+                            <textarea 
+                                class="form-control" 
+                                id="sign" 
+                                placeholder="账号的个性签名"
+                                rows="5">{{ data.sign }}</textarea>
+                            <small id="signHelp" class="form-text text-muted">
+                                设置账号的个性签名，可为空
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">密码</label>
+                            <input type="password" 
+                                class="form-control" 
+                                id="password" 
+                                value=""
+                                autocomplete="false"
+                                placeholder="账号的密码">
+                            <small id="passwordHelp" class="form-text text-muted">
+                                设置账号的密码，为空不修改
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label">
+                                头像
+                            </label> 
+                            <div class="form-control-static">
+                                <div class="avatar avatar-xl">
+                                    <img src="{{ avatar_url(data.avatar) }}" 
+                                        alt="{{ data.nickname }}" 
+                                        class="avatar-img rounded-circle">
+                                </div>
+                            </div> 
+                        </div>
+                    
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" 
+                                    type="checkbox"
+                                    id="avatar_delete"
+                                    value="1">
+                                <span class="form-check-sign">
+                                    清除账号头像
+                                </span>
+                            </label>
+                            <small id="avatarHelp" class="form-text text-muted">
+                                选择清除账号头像后，账号将会清空头像数据
+                            </small>
+                        </div>
+                        
+                        <div class="form-check">
+                            <label>状态</label>
+                            
+                            <div class="form-control">
+                                <label class="form-radio-label">
+                                    <input class="form-radio-input board-status" 
+                                        type="radio" 
+                                        name="status" 
+                                        value="1" 
+                                        {% if data.status == 1 %}
+                                        checked=""
+                                        {% endif %}
+                                        >
+                                    <span class="form-radio-sign">启用</span>
+                                </label>
+                                <label class="form-radio-label ml-3">
+                                    <input class="form-radio-input board-status" 
+                                        type="radio" 
+                                        name="status" 
+                                        value="0"
+                                        {% if data.status != 1 %}
+                                        checked=""
+                                        {% endif %}
+                                        >
+                                    <span class="form-radio-sign">禁用</span>
+                                </label>
+                            </div>
+                            <small id="statusHelp" class="form-text text-muted">
+                                设置账号的使用状态
+                            </small>
+                        </div>
+
+                    </div>
+                    
+                    <div class="card-action">
+                        <button class="btn btn-success js-save-button">确认修改</button>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_append %}
+<script>
+$(function() {
+    $(".nav-item.board-user").addClass("active");
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var username = $("#username").val();
+        var nickname = $("#nickname").val();
+        var sign = $("#sign").val();
+        var password = $("#password").val();
+        var avatar_delete = ($("#avatar_delete").is(':checked') == true) ? 1 : 0;
+        var status = $("[name=status]:checked").val();
+
+        var url = "{{ url_for('admin.user.edit-save', {'id': data.id}) }}";
+        $.post(url, {
+            username: username,
+            nickname: nickname,
+            sign: sign,
+            password: password,
+            avatar_delete: avatar_delete,
+            status: status,
+        }, function(data) {
+            if (data.code == 0) {
+                layer.msg("编辑成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+});
+</script>
+{% endblock %}
