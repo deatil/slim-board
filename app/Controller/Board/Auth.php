@@ -7,10 +7,11 @@ namespace App\Controller\Board;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
-use App\Board\Gable;
-use App\Board\Auth as BoardAuth;
-use App\Board\Validation;
-use App\Board\Auth\Auth as AuthTool;
+use Skg\Board\Gable;
+use Skg\Board\Request;
+use Skg\Board\Validation;
+use Skg\Board\Auth as BoardAuth;
+use Skg\Board\Auth\Auth as AuthTool;
 use App\Model\User as UserModel;
 
 /**
@@ -22,7 +23,7 @@ use App\Model\User as UserModel;
 class Auth extends Base
 {
     /**
-     * 首页
+     * 验证码
      */
     public function captcha($request, $response, $args)
     {
@@ -48,7 +49,7 @@ class Auth extends Base
     }
     
     /**
-     * 详情
+     * 登录
      */
     public function login($request, $response, $args)
     {
@@ -61,7 +62,7 @@ class Auth extends Base
     }
     
     /**
-     * 详情
+     * 确认登录
      */
     public function loginCheck($request, $response, $args)
     {
@@ -129,7 +130,7 @@ class Auth extends Base
     }
     
     /**
-     * 详情
+     * 退出
      */
     public function logout($request, $response, $args)
     {
@@ -143,4 +144,82 @@ class Auth extends Base
         
         return $this->successHtml($response, "退出成功", url("board.auth-login"));
     }
+    
+    /**
+     * 注册
+     */
+    public function register($request, $response, $args)
+    {
+        $data = Gable::$di->get("session")->get('login_auth');
+        if (! empty($data)) {
+            return $this->errorHtml($response, "你已经登录", url("board.index"));
+        }
+        
+        return $this->view($response, 'auth/register.html', []);
+    }
+    
+    /**
+     * 确认注册
+     */
+    public function registerCheck($request, $response, $args)
+    {
+        $data = Gable::$di->get("session")->get('login_auth');
+        if (! empty($data)) {
+            return $this->errorJson($response, '你已经登录');
+        }
+        
+        $data = $request->getParsedBody();
+        
+        $v = Validation::check($data, [
+            ['username', 'required', 'msg' => '账号不能为空'], 
+            ['username', 'min:3', 'msg' => '账号长度不能小于3个'], 
+            ['password', 'required', 'msg' => '密码不能为空'], 
+            ['password', 'min:3', 'msg' => '密码长度不能小于3个'], 
+            ['captcha', 'required', 'msg' => '验证码不能为空'], 
+            ['captcha', 'length:4', 'msg' => '验证码长度错误'], 
+        ]);
+        
+        if ($v !== true) {
+            return $this->errorJson($response, $v);
+        }
+        
+        $username = $data['username'] ?? "";
+        $password = $data['password'] ?? "";
+        $captcha = $data['captcha'] ?? "";
+        
+        $sessionCaptcha = Gable::$di->get("session")->get('captcha_id');
+        if (empty($sessionCaptcha)) {
+            return $this->errorJson($response, '验证码已失效');
+        }
+        
+        if (strtolower($captcha) != strtolower($sessionCaptcha)) {
+            return $this->errorJson($response, '验证码错误');
+        }
+        
+        Gable::$di->get("session")->delete('captcha_id');
+        
+        $userInfo = UserModel::getInfoByUsername($username);
+        if (! empty($userInfo)) {
+            return $this->errorJson($response, '账号已被注册');
+        }
+        
+        $password = BoardAuth::passwordHash($password);
+        
+        $addIp = Request::ip($request);
+        
+        // 添加账号
+        $createId = UserModel::create([
+            "username" => $username,
+            "nickname" => $username,
+            "password" => $password,
+            "add_time" => time(),
+            "add_ip" => $addIp,
+        ]);
+        if (!($createId > 0)) {
+            return $this->errorJson($response, '注册账号失败，请重试');
+        }
+        
+        return $this->successJson($response, '注册账号成功');
+    }
+
 }

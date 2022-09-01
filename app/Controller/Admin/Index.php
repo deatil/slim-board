@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Board\Gable;
-use App\Board\Request;
+use Skg\Board\Gable;
+use Skg\Board\Request;
+
+use App\Model\User as UserModel;
+use App\Model\Board as BoardModel;
+use App\Model\Topic as TopicModel;
 
 /**
  * Index
@@ -20,8 +24,40 @@ class Index extends Base
      */
     public function index($request, $response, $args)
     {
+        $userTotal = UserModel::getCount([]);
+        $boardTotal = BoardModel::getCount([]);
+        $topicTotal = TopicModel::getCount([]);
+        $newTopicTotal = TopicModel::getCount([
+            "add_time[>=]" => strtotime("-7 day"),
+        ]);
+        
+        // 最新话题
+        $newTopicList = TopicModel::getList([
+            "LIMIT" => [0, 10],
+            "ORDER" => [
+                "add_time" => "DESC",
+            ],
+        ]);
+        
+        // 最新回复话题
+        $newReplyTopicList = TopicModel::getList([
+            "AND" => [
+                "last_reply[!]" => 0,
+            ],
+            "LIMIT" => [0, 10],
+            "ORDER" => [
+                "last_reply" => "DESC",
+            ],
+        ]);
+        
         return $this->view($response, 'index/index.html', [
-            'name' => $args['name'] ?? ''
+            'userTotal' => number_format($userTotal),
+            'boardTotal' => number_format($boardTotal),
+            'topicTotal' => number_format($topicTotal),
+            'newTopicTotal' => number_format($newTopicTotal),
+            
+            'newTopicList' => $newTopicList,
+            'newReplyTopicList' => $newReplyTopicList,
         ]);
     }
 }

@@ -4,10 +4,11 @@ use DI\Container;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
+use Skg\Board\Gable;
+use Skg\Board\Bootstrap\Bootstrap;
+use Skg\Board\Bootstrap\Handler;
+
 use App\Route\Route;
-use App\Board\Gable;
-use App\Board\Bootstrap\Bootstrap;
-use App\Board\Bootstrap\Handler;
 
 require __DIR__ . '/../vendor/autoload.php';
 

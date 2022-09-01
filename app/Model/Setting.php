@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Board\Orm;
+use Skg\Board\Orm;
 
 /**
  * 网站设置

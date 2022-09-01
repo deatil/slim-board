@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Board\Auth;
-use App\Board\Gable;
-use App\Board\Request;
-use App\Board\Validation;
-use App\Board\Auth\User as AuthUser;
-use App\Board\Page\Bootstrap as BootstrapPage; 
+use Skg\Board\Auth;
+use Skg\Board\Gable;
+use Skg\Board\Request;
+use Skg\Board\Validation;
+use Skg\Board\Auth\User as AuthUser;
+use Skg\Board\Page\Bootstrap as BootstrapPage; 
 use App\Model\User as UserModel;
 
 /**

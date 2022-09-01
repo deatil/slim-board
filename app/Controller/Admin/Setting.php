@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Board\Gable;
-use App\Board\Request;
+use Skg\Board\Gable;
+use Skg\Board\Request;
 use App\Model\Setting as SettingModel;
 
 /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Board\Orm;
+use Skg\Board\Orm;
 
 /**
  * 话题
@@ -20,11 +20,11 @@ class Topic
         "topic.title",
         "topic.views",
         "topic.replys",
-        "topic.last_reply",
         "topic.is_top",
         "topic.is_digest",
         "topic.is_close",
         "topic.status",
+        "topic.last_reply",
         "topic.add_time",
         "topic.add_ip",
 
@@ -35,9 +35,17 @@ class Topic
         ],
 
         "user" => [
+            "user.id",
             "user.username",
             "user.nickname",
             "user.sign",
+        ],
+
+        "last_user" => [
+            "last_user.id",
+            "last_user.username",
+            "last_user.nickname",
+            "last_user.sign",
         ]
     ];
     
@@ -49,6 +57,7 @@ class Topic
         $data = Orm::select("topic", [
             "[>]board" => ["board_id" => "id"],
             "[>]user" => ["user_id" => "id"],
+            "[>]user(last_user)" => ["last_user_id" => "id"],
         ], static::$columns, $where);
 
         return $data;
@@ -69,6 +78,7 @@ class Topic
         $data = Orm::select("topic", [
             "[>]board" => ["board_id" => "id"],
             "[>]user" => ["user_id" => "id"],
+            "[>]user(last_user)" => ["last_user_id" => "id"],
         ], static::$columns, $where);
 
         return $data;
@@ -89,6 +99,7 @@ class Topic
         $data = Orm::select("topic", [
             "[>]board" => ["board_id" => "id"],
             "[>]user" => ["user_id" => "id"],
+            "[>]user(last_user)" => ["last_user_id" => "id"],
         ], static::$columns, $where);
 
         return $data;

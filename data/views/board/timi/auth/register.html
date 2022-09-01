@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>注册账号</title>
+    <style>
+    .register-captcha {
+        cursor: pointer;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        注册账号
+        
+        <a href="{{ url_for('board.auth-login') }}">
+            登录
+        </a>
+
+        <hr />
+
+        <form method="post">
+            账号:<br>
+            <input type="text" 
+                name="username"
+                id="username" >
+            <br>
+            
+            密码:<br>
+            <input type="password" 
+                name="password"
+                id="password">
+            <br>
+            
+            验证码:<br>
+            <input type="text" 
+                name="captcha"
+                id="captcha">
+            <br>
+            
+            <img src="{{ url_for('board.auth-captcha') }}" 
+                data-src="{{ url_for('board.auth-captcha') }}" 
+                title="刷新验证码"
+                class="register-captcha js-captcha-refresh"/>
+            <br>
+            
+            <button type="button" class="layui-btn js-register-button">提交注册</button>
+        </form> 
+
+    </div>
+    <script src='{{ board_assets("js/jquery-3.4.1.min.js") }}' type="text/javascript"></script>
+    <script src='{{ board_assets("js/layer/layer.js") }}' type="text/javascript"></script>
+    <script type="text/javascript">
+    (function($) {
+        "use strict";
+        
+        // 刷新验证码
+        $(".js-captcha-refresh").click(function(e) {
+            e.stopPropagation;
+            e.preventDefault;
+            
+            var url = $(this).data("src") + "?t=" + Math.random();
+            $(this).attr("src", url);
+        });
+        
+        // 登录
+        $(".js-register-button").click(function(e) {
+            e.stopPropagation;
+            e.preventDefault;
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var captcha = $("#captcha").val();
+
+            var url = "{{ url_for('board.auth-register-check') }}";
+            $.post(url, {
+                username: username,
+                password: password,
+                captcha: captcha,
+            }, function(data) {
+                if (data.code == 0) {
+                    layer.msg("注册账号成功");
+                    
+                    setTimeout(function() {
+                        window.location.href = "{{ url_for('board.auth-login') }}";
+                    }, 1500);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }).fail(function (xhr, status, info) {
+                layer.msg("请求失败");
+            });
+        });
+    })(jQuery);
+    </script>
+
+</body>
+</html>
+

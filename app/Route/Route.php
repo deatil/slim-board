@@ -6,7 +6,7 @@ namespace App\Route;
 
 use Slim\Routing\RouteCollectorProxy;
 
-use App\Board\Gable;
+use Skg\Board\Gable;
 use App\Middleware;
 use App\Controller\Board as BoardController;
 use App\Controller\Admin as AdminController;
@@ -50,16 +50,27 @@ class Route
         $app->get('/auth/login', [$authController, 'login'])->setName('board.auth-login');
         $app->post('/auth/login', [$authController, 'loginCheck'])->setName('board.auth-login-check');
         $app->get('/auth/logout', [$authController, 'logout'])->setName('board.auth-logout');
+        $app->get('/auth/register', [$authController, 'register'])->setName('board.auth-register');
+        $app->post('/auth/register', [$authController, 'registerCheck'])->setName('board.auth-register-check');
         
         // 登录部分
         $app->group('', function (RouteCollectorProxy $group) {
-                
             // 账号信息
             $profileController = BoardController\Profile::class;
             $group->get('/profile', [$profileController, 'index'])->setName('board.profile');
             $group->post('/profile', [$profileController, 'save'])->setName('board.profile-save');
             $group->get('/profile/password', [$profileController, 'password'])->setName('board.profile-password');
             $group->post('/profile/password', [$profileController, 'passwordSave'])->setName('board.profile-password-save');
+            
+            // 话题
+            $topicController = BoardController\Topic::class;
+            $group->get('/c/{slug}', [$topicController, 'index'])->setName('board.topic-index');
+            $group->get('/t/{id}', [$topicController, 'views'])->setName('board.topic-view');
+            $group->get('/topic/create', [$topicController, 'create'])->setName('board.topic-create');
+            $group->post('/topic/create', [$topicController, 'createSave'])->setName('board.topic-create-save');
+            $group->get('/topic/update/{id}', [$topicController, 'update'])->setName('board.topic-update');
+            $group->post('/topic/update/{id}', [$topicController, 'updateSave'])->setName('board.topic-update-save');
+            $group->post('/topic/delete/{id}', [$topicController, 'delete'])->setName('board.topic-delete');
         })->add(new Middleware\AuthMiddleware());
     }
     

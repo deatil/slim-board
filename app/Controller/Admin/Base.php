@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Board\Gable;
-use App\Board\Controller as BaseController;
+use Skg\Board\Gable;
+use Skg\Board\Controller as BaseController;
 
 /**
  * Base

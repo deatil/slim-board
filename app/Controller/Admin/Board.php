@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Board\Gable;
-use App\Board\Request;
-use App\Board\Validation;
-use App\Board\Page\Bootstrap as BootstrapPage; 
+use Skg\Board\Gable;
+use Skg\Board\Request;
+use Skg\Board\Validation;
+use Skg\Board\Page\Bootstrap as BootstrapPage; 
 use App\Model\Board as BoardModel;
 
 /**

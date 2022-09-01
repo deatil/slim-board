@@ -7,10 +7,10 @@ namespace App\Controller\Admin;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
-use App\Board\Gable;
-use App\Board\Auth as BoardAuth;
-use App\Board\Validation;
-use App\Board\Auth\User as AuthUser;
+use Skg\Board\Gable;
+use Skg\Board\Validation;
+use Skg\Board\Auth as BoardAuth;
+use Skg\Board\Auth\User as AuthUser;
 
 /**
  * 账号相关

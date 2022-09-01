@@ -9,9 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use App\Board\Msg;
-use App\Board\Gable;
-use App\Board\Auth\User as AuthUser;
+use Skg\Board\Msg;
+use Skg\Board\Gable;
+use Skg\Board\Auth\User as AuthUser;
 
 /**
  * 管理员验证

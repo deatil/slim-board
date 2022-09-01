@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Board;
 
-use App\Board\Gable;
-use App\Board\Request;
-use App\Board\Validation;
-use App\Board\Auth\User as AuthUser;
-use App\Board\Auth as BoardAuth;
+use Skg\Board\Gable;
+use Skg\Board\Request;
+use Skg\Board\Validation;
+use Skg\Board\Auth\User as AuthUser;
+use Skg\Board\Auth as BoardAuth;
 use App\Model\User as UserModel;
 
 /**
@@ -53,13 +53,21 @@ class Profile extends Base
         $nickname = $data['nickname'] ?? "";
         $sign = $data['sign'] ?? "";
         
+        // 当前登录账号信息
+        $nowUserInfo = AuthUser::info();
+        
+        $userInfo = UserModel::getInfoByUsername($username);
+        if (! empty($userInfo) && $nowUserInfo['username'] != $username) {
+            return $this->errorJson($response, '账号已被注册');
+        }
+        
         $data = [
             'username' => $username,
             'nickname' => $nickname,
             'sign' => $sign,
         ];
         
-        $userId = AuthUser::id();
+        $userId = $nowUserInfo['id'];
         
         $status = UserModel::updateById($userId, $data);
         if ($status !== true) {
@@ -123,6 +131,10 @@ class Profile extends Base
         if ($status !== true) {
             return $this->errorJson($response, '更改密码失败');
         }
+        
+        // 更改密码成功后退出登录
+        Gable::$di->get("session")->delete('login_auth');
+        Gable::$di->get("cookie")->delete('bla');
         
         return $this->successJson($response, '更改密码成功');
     }
