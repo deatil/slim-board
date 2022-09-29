@@ -21,6 +21,8 @@ class Setting extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $data = SettingModel::getListByKv();
         
         return $this->view($response, 'setting/index.html', [

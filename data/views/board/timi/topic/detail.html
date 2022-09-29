@@ -1,0 +1,301 @@
+{% extends "board/timi/common/base.html" %}
+
+{% block title %}话题详情{% endblock %}
+
+{% block content %}
+<div class="topic-title">
+    {{ data['title'] }}
+</div>
+
+<div class="topic-content">
+    <div class="topic-content-user">
+        <a href="{{ url_for('board.topic-index', {slug: board.slug}) }}" >{{ board.name }} </a>
+        / <a href="{{ url_for('board.user-index', {username: user.username}) }}" >{{ user.nickname }} </a>
+        / {{ data.add_time|date("Y-m-d H:i:s") }}
+        / {{ data.replys }}回复
+    </div>
+    
+    <div class="topic-content-data">
+        {{ data['content'] | raw }}
+    </div>
+    
+    <div class="topic-content-footer">
+        {% if auth_user.isAdmin() == 1 or data['user_id'] == auth_user['id'] %}
+            <a href="{{ url_for('board.topic-update', {id: data.id}) }}" >编辑</a>
+            
+            {% if auth_user.isAdmin() == 1 %}
+                / <a href="javascript:;" 
+                    data-url="{{ url_for('board.topic-top', {id: data.id}) }}" 
+                    data-status="{{ data.is_top }}"
+                    class="js-mod-btn">{{ data.is_top ? "取消置顶" : "置顶话题" }}</a>
+                / <a href="javascript:;" 
+                    data-url="{{ url_for('board.topic-digest', {id: data.id}) }}" 
+                    data-status="{{ data.is_digest }}"
+                    class="js-mod-btn">{{ data.is_digest ? "取消精华" : "设为精华" }}</a>
+            {% endif %}
+            
+            / <a href="javascript:;" 
+                data-url="{{ url_for('board.topic-close', {id: data.id}) }}" 
+                data-status="{{ data.is_close }}"
+                class="js-mod-btn">{{ data.is_close ? "取消关闭" : "关闭回复" }}</a>
+            / <a href="javascript:;" 
+                data-url="{{ url_for('board.topic-delete', {id: data.id}) }}" 
+                class="js-delete-btn">删除</a>
+        {% endif %}
+    </div>
+</div>
+
+<hr />
+回复列表:
+<div class="topic-comments">
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <div class="comment-meta">
+                    <a href="{{ url_for('board.user-index', {username: comment.user.username}) }}" >
+                        {{ comment.user.nickname }} 
+                    </a>
+                    
+                    / 
+                    {{ comment.add_time|date("Y-m-d H:i:s") }}
+                    
+                    {% if auth_user.isAdmin() == 1 or comment['user_id'] == auth_user['id'] %}
+                        / <a href="{{ url_for('board.comment-update', {id: comment.id}) }}" >编辑</a>
+                        / <a href="javascript:;" 
+                            data-url="{{ url_for('board.comment-delete', {id: comment.id}) }}" 
+                            class="js-comment-delete-btn">删除</a>
+                    {% endif %}
+                </div>
+                <div class="comment-body">
+                    {{ comment.content | raw }}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    {% if commentTotal >= 10 %}
+        <div class="comment-more">
+            <a href="{{ url_for('board.comment-index', {tid: data.id}) }}" >
+                更多回复
+            </a>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="comment-nodata">
+        无数据
+    </div>
+{% endif %}
+</div>
+
+<hr />
+
+<div class="topic-comment">
+    <form method="post" class="topic-comment-form">
+        回复:<br>
+        <div id="standalone-container">
+            <div id="editor-container"></div>
+        </div>
+        <textarea name="comment" id="topic-comment" style="display: none;"></textarea>
+        <br>
+        
+        <input type="hidden" name="tid" value="{{ data['id'] }} " />
+            
+        <button type="button" class="layui-btn js-save-button">添加</button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href='{{ board_assets("js/highlight/styles/monokai-sublime.min.css") }}' />
+<link rel="stylesheet" href='{{ board_assets("js/katex/katex.min.css") }}' />
+<link rel="stylesheet" href='{{ board_assets("js/quill/quill.snow.css") }}' />
+<style>
+body > #standalone-container {
+    margin: 50px auto;
+    max-width: 720px;
+}
+#editor-container {
+    height: 150px;
+}
+</style>
+{% endblock %}
+
+{% block script %}
+<script src='{{ board_assets("js/jquery-3.4.1.min.js") }}' type="text/javascript"></script>
+<script src='{{ board_assets("js/layer/layer.js") }}' type="text/javascript"></script>
+<script src='{{ board_assets("js/highlight/highlight.min.js") }}'></script>
+<script src='{{ board_assets("js/katex/katex.min.js") }}'></script>
+<script src='{{ board_assets("js/quill/quill.min.js") }}'></script>
+<script>
+$(function() {
+    // 删除
+    $('.js-delete-btn').click(function() {
+        var url = $(this).data('url');
+        
+        layer.confirm('您确定要删除该话题吗？', {
+            offset: 'c',
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {}, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        window.location.href = "{{ url_for('board.index') }}";
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            }).fail(function (xhr, status, info) {
+                layer.msg("请求失败");
+            });
+        });
+    });
+    
+    // 操作
+    $('.js-mod-btn').click(function() {
+        var url = $(this).data('url');
+        var status = $(this).data('status');
+        var msg = $(this).text();
+        
+        if (status != 1) {
+            status = 1;
+        } else {
+            status = 0;
+        }
+        
+        layer.confirm('您确定要' + msg + '吗？', {
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {
+                status: status,
+            }, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            }).fail(function (xhr, status, info) {
+                layer.msg("请求失败");
+            });
+        });
+    });
+    
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var data = $(".topic-comment-form").serialize();
+
+        var url = "{{ url_for('board.comment-create-save') }}";
+        $.post(url, data, function(data) {
+            if (data.code == 0) {
+                layer.msg("回复添加成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+    // 删除回复
+    $('.js-comment-delete-btn').click(function() {
+        var url = $(this).data('url');
+        
+        layer.confirm('您确定要删除该回复吗？', {
+            offset: 'c',
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {}, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            }).fail(function (xhr, status, info) {
+                layer.msg("请求失败");
+            });
+        });
+    });
+    
+    var toolbarOptions = [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video', 'formula'],
+
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+
+      [{ 'color': [] }, { 'background': [] }],
+
+      ['clean']
+    ];
+    var quill = new Quill('#editor-container', {
+        modules: {
+            formula: true,
+            syntax: true,
+            toolbar: toolbarOptions
+        },
+        placeholder: '回复内容',
+        theme: 'snow'
+    });
+    quill.on('text-change', function(delta, oldDelta, source) {
+        var data = $(".ql-editor").html();
+        $("#topic-comment").html(data);
+    });
+    
+    var showImageUI = function(value) {
+      var thiz = this;
+      
+      if (value) {
+       layer.prompt({
+            title : '请输入链接地址',
+            btn:['确认', '取消'],
+            area:['230px','50px']
+        }, function(text, index) {
+            try {
+                thiz.quill.format('image', text);
+            } catch{}
+            
+            layer.close(index);
+        });
+      } else {
+        this.quill.format('image', false);
+      }
+    }
+    var toolbar = quill.getModule('toolbar');
+    toolbar.addHandler('image', showImageUI);
+    
+});
+</script>
+{% endblock %}

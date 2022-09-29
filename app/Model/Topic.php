@@ -35,17 +35,17 @@ class Topic
         ],
 
         "user" => [
-            "user.id",
+            "user.id(uid)",
             "user.username",
             "user.nickname",
             "user.sign",
         ],
 
         "last_user" => [
-            "last_user.id",
-            "last_user.username",
-            "last_user.nickname",
-            "last_user.sign",
+            "last_user.id(last_uid)",
+            "last_user.username(last_username)",
+            "last_user.nickname(last_nickname)",
+            "last_user.sign(last_sign)",
         ]
     ];
     

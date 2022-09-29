@@ -8,8 +8,9 @@ use Skg\Board\Gable;
 use Skg\Board\Request;
 use Skg\Board\Page\Bootstrap as BootstrapPage; 
 
-use App\Model\Topic as TopicModel;
 use App\Model\Board as BoardModel;
+use App\Model\Topic as TopicModel;
+use App\Model\Reply as ReplyModel;
 
 /**
  * 话题管理
@@ -24,6 +25,8 @@ class Topic extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $keyword = Request::get($request, "keyword", "");
         
         $isTop = Request::get($request, "is_top", "");
@@ -41,23 +44,23 @@ class Topic extends Base
         
         if (! empty($keyword)) {
             $where['AND']['OR'] = [
-                "title[~]" => $keyword,
-                "content[~]" => $keyword,
+                "topic.title[~]" => $keyword,
+                "topic.content[~]" => $keyword,
             ];
         }
         
         if (! empty($status)) {
-            $where['AND']['status'] = ($status == 1) ? 1 : 0;
+            $where['AND']['topic.status'] = ($status == 1) ? 1 : 0;
         }
         
         if (! empty($isTop)) {
-            $where['AND']['is_top'] = ($isTop == 1) ? 1 : 0;
+            $where['AND']['topic.is_top'] = ($isTop == 1) ? 1 : 0;
         }
         if (! empty($isDigest)) {
-            $where['AND']['is_digest'] = ($isDigest == 1) ? 1 : 0;
+            $where['AND']['topic.is_digest'] = ($isDigest == 1) ? 1 : 0;
         }
         if (! empty($isClose)) {
-            $where['AND']['is_close'] = ($isClose == 1) ? 1 : 0;
+            $where['AND']['topic.is_close'] = ($isClose == 1) ? 1 : 0;
         }
         
         $listWhere = [
@@ -66,7 +69,7 @@ class Topic extends Base
                 $limit
             ],
             "ORDER" => [
-                "add_time" => "DESC",
+                "topic.add_time" => "DESC",
             ],
         ];
         
@@ -77,7 +80,10 @@ class Topic extends Base
         $total = TopicModel::getCount($where);
         
         // 分页页面
-        $pageHtml = BootstrapPage::make($limit, (int) $page, $total);
+        $pageHtml = BootstrapPage::make($limit, (int) $page, $total, false, [
+            'path' => $request->getUri()->getPath(),
+            'query' => $request->getQueryParams(),
+        ]);
         
         return $this->view($response, 'topic/index.html', [
             'keyword' => $keyword,
@@ -98,6 +104,8 @@ class Topic extends Base
      */
     public function edit($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $id = $args['id'] ?? '';
         if (empty($id)) {
             return $this->errorHtml($response, "话题 id 错误");
@@ -133,18 +141,17 @@ class Topic extends Base
         
         $data = $request->getParsedBody();
         
-        $boardId = ($data['board_id'] == 1) ? 1 : 0;
         $isTop = ($data['is_top'] == 1) ? 1 : 0;
         $isDigest = ($data['is_digest'] == 1) ? 1 : 0;
         $isClose = ($data['is_close'] == 1) ? 1 : 0;
         $status = ($data['status'] == 1) ? 1 : 0;
         
-        if ($boardId <= 0) {
+        if ($data['board_id'] <= 0) {
             return $this->errorJson($response, "话题 id 错误");
         }
         
         $status = TopicModel::updateById($id, [
-            "board_id" => $boardId,
+            "board_id" => $data['board_id'],
             "is_top" => $isTop,
             "is_digest" => $isDigest,
             "is_close" => $isClose,
@@ -171,6 +178,9 @@ class Topic extends Base
         if (!$status) {
             return $this->errorJson($response, '删除失败');
         }
+        
+        // 删除回复
+        ReplyModel::deleteByTopicId($id);
 
         return $this->successJson($response, '删除成功');
     }

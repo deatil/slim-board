@@ -1,19 +1,30 @@
-<a href="{{ url_for('board.index') }}">Board</a>
-<br /><br />
+<div class="logo">
+    <a href="{{ url_for('board.index') }}" title="{{ website_setting.website_name }}">
+        <img src='{{ board_assets("image/logo.png") }}' alt="{{ website_setting.website_name }}">
+        <span class="website-name">
+            {{ website_setting.website_name }}
+        </span>
+    </a>
+</div>
 
-{% if is_login() %}
-    {{ user()['nickname'] }}
+{% set userinfo = auth_user.info() %}
 
-    <a href="{{ url_for('board.profile') }}">更新信息</a>
-    <a href="{{ url_for('board.profile-password') }}">更改密码</a>
-    
-    {% if is_admin() == 1 %}
-        <a href="{{ url_for('admin.index') }}">管理</a>
+<div class="user">
+    {% if auth_user.isLogin() == 1 %}
+        {{ userinfo['nickname'] }}
+
+        <a href="{{ url_for('board.profile') }}">更新信息</a>
+        <a href="{{ url_for('board.profile-avatar') }}">更新头像</a>
+        <a href="{{ url_for('board.profile-password') }}">更改密码</a>
+        
+        {% if auth_user.isAdmin() == 1 %}
+            <a href="{{ url_for('admin.index') }}" target="_blank">管理</a>
+        {% endif %}
+        
+        <a href="{{ url_for('board.auth-logout') }}">退出登录</a>
+    {% else %}
+        <a href="{{ url_for('board.auth-login') }}">马上登录</a>
     {% endif %}
-    
-    <a href="{{ url_for('board.auth-logout') }}">退出登录</a>
-{% else %}
-    <a href="{{ url_for('board.auth-login') }}">马上登录</a>
-{% endif %}
+</div>
 
 <hr />

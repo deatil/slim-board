@@ -24,6 +24,8 @@ class Index extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $userTotal = UserModel::getCount([]);
         $boardTotal = BoardModel::getCount([]);
         $topicTotal = TopicModel::getCount([]);
@@ -35,18 +37,18 @@ class Index extends Base
         $newTopicList = TopicModel::getList([
             "LIMIT" => [0, 10],
             "ORDER" => [
-                "add_time" => "DESC",
+                "topic.add_time" => "DESC",
             ],
         ]);
         
         // 最新回复话题
         $newReplyTopicList = TopicModel::getList([
             "AND" => [
-                "last_reply[!]" => 0,
+                "topic.last_reply[!]" => 0,
             ],
             "LIMIT" => [0, 10],
             "ORDER" => [
-                "last_reply" => "DESC",
+                "topic.last_reply" => "DESC",
             ],
         ]);
         

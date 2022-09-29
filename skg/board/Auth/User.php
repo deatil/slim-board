@@ -15,57 +15,77 @@ use App\Model\User as UserModel;
  */
 class User
 {
-    // 用户 id
-    public static $id = '';
+    // 账号 id
+    protected $id;
     
-    // 用户数据
-    public static $data = [];
+    // 账号信息
+    protected $userInfo;
+    
+    /**
+     * 设置账号 id
+     */
+    public function withId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+    
+    /**
+     * 设置账号信息
+     */
+    public function withUserInfo($userInfo)
+    {
+        $this->userInfo = $userInfo;
+        
+        return $this;
+    }
     
     /**
      * 账号 id
      */
-    public static function id()
+    public function id()
     {
-        if (empty(static::$id)) {
-            static::$id = Gable::$di->get("session")->get('login_auth');
-        }
-        
-        return static::$id;
+        return $this->id;
     }
     
     /**
      * 账号信息
      */
-    public static function info()
+    public function info()
     {
-        if (! empty(static::$data)) {
-            return static::$data;
+        return $this->userInfo;
+    }
+    
+    /**
+     * 账号信息
+     */
+    public function isLogin()
+    {
+        if (! empty($this->id) && $this->id > 0) {
+            return true;
         }
         
-        $id = Gable::$di->get("session")->get('login_auth');
-        if (empty($id)) {
-            return [];
-        }
-        
-        $userInfo = UserModel::getInfoById($id);
-        if (empty($userInfo) || $userInfo['status'] != 1) {
-            return [];
-        }
-        
-        static::$data = $userInfo;
-        
-        return $userInfo;
+        return false;
     }
     
     /**
      * 是否为管理账号
      */
-    public static function isAdmin()
+    public function isActive()
+    {
+        return (!empty($this->userInfo) && $this->userInfo['status'] == 1);
+    }
+    
+    /**
+     * 是否为管理账号
+     */
+    public function isAdmin()
     {
         $config = Gable::$di->get("config");
         $adminIds = $config->get('auth.admin_ids');
         
-        return in_array(static::id(), (array) $adminIds);
+        return in_array($this->id, (array) $adminIds);
     }
     
 }

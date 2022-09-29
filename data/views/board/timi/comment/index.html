@@ -1,0 +1,127 @@
+{% extends "board/timi/common/base.html" %}
+
+{% block title %}话题详情{% endblock %}
+
+{% block content %}
+<div class="topic-title">
+    <a href="{{ url_for('board.topic-view', {'id': topicInfo.id}) }}">
+        {{ topicInfo.title }}
+    </a>
+    的回复列表
+</div>
+
+<hr />
+回复列表:
+<div class="topic-comments">
+    {% if list %}
+        <ul>
+            {% for comment in list %}
+                <li>
+                    <div class="comment-meta">
+                        <a href="{{ url_for('board.user-index', {username: comment.user.username}) }}" >
+                            {{ comment.user.nickname }} 
+                        </a>
+                        
+                        / 
+                        {{ comment.add_time|date("Y-m-d H:i:s") }}
+                        
+                        {% if auth_user.isAdmin() == 1 or comment['user_id'] == auth_user['id'] %}
+                            / <a href="{{ url_for('board.comment-update', {id: comment.id}) }}" >编辑</a>
+                            / <a href="javascript:;" 
+                                data-url="{{ url_for('board.comment-delete', {id: comment.id}) }}" 
+                                class="js-comment-delete-btn">删除</a>
+                        {% endif %}
+                    </div>
+                    <div class="comment-body">
+                        {{ comment.content | raw }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="comment-page">
+            {{ pageHtml | raw }}
+        </div>
+    {% else %}
+        <div class="comment-nodata">
+            无数据
+        </div>
+    {% endif %}
+</div>
+
+<hr />
+
+<div class="topic-comment">
+    <form method="post" class="topic-comment-form">
+        回复:<br>
+        <textarea class="form-control" 
+            name="comment"
+            placeholder="回复内容" 
+            id="comment" 
+            style="height: 150px;"></textarea>
+        <br>
+        
+        <input type="hidden" name="tid" value="{{ topicInfo['id'] }} " />
+            
+        <button type="button" class="layui-btn js-save-button">添加</button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src='{{ board_assets("js/jquery-3.4.1.min.js") }}' type="text/javascript"></script>
+<script src='{{ board_assets("js/layer/layer.js") }}' type="text/javascript"></script>
+<script>
+$(function() {
+    // 保存
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var data = $(".topic-comment-form").serialize();
+
+        var url = "{{ url_for('board.comment-create-save') }}";
+        $.post(url, data, function(data) {
+            if (data.code == 0) {
+                layer.msg("回复添加成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+
+    // 删除回复
+    $('.js-comment-delete-btn').click(function() {
+        var url = $(this).data('url');
+        
+        layer.confirm('您确定要删除该回复吗？', {
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {}, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            });
+        });
+    });
+    
+});
+</script>
+{% endblock %}

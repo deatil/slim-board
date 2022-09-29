@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Skg\Board;
 
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
+use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Factory\StreamFactory;
 
 use Skg\Board\Gable;
@@ -18,6 +20,36 @@ use Skg\Board\Gable;
 class Msg
 {
     /**
+     * 获取空响应
+     *
+     * @return string
+     */
+    public static function createResponse(
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): ResponseInterface {
+        $response = Gable::$app->getResponseFactory()
+            ->createResponse($code, $reasonPhrase);
+        
+        return $response;
+    }
+    
+    /**
+     * 输出数据
+     *
+     * @return string
+     */
+    public static function toData($data): StreamInterface 
+    {
+        $streamFactory = new StreamFactory();
+        $body = $streamFactory->createStream();
+        
+        $body->write($data);
+        
+        return $body;
+    }
+    
+    /**
      * 输出成功页面
      *
      * @return string
@@ -28,11 +60,6 @@ class Msg
         $wait = 5,
         $tpl = 'error/error.html'
     ): StreamInterface {
-        $streamFactory = new StreamFactory();
-        $body = $streamFactory->createStream();
-        
-        // Gable::$di->get('config')->get('app.success_tpl');
-        
         $view = Gable::$di->get('view')->fetch($tpl, [
             'msg' => $msg,
             'url' => $url,
@@ -40,9 +67,7 @@ class Msg
             'code' => 1,
         ]);
         
-        $body->write($view);
-        
-        return $body;
+        return static::toData($view);
     }
     
     /**
@@ -56,9 +81,6 @@ class Msg
         $wait = 5,
         $tpl = 'error/error.html'
     ): StreamInterface {
-        $streamFactory = new StreamFactory();
-        $body = $streamFactory->createStream();
-        
         $view = Gable::$di->get('view')->fetch($tpl , [
             'msg' => $msg,
             'url' => $url,
@@ -66,8 +88,6 @@ class Msg
             'code' => 0,
         ]);
         
-        $body->write($view);
-        
-        return $body;
+        return static::toData($view);
     }
 }

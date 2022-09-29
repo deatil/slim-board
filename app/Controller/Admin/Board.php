@@ -23,6 +23,8 @@ class Board extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $keyword = Request::get($request, "keyword", "");
         $status = Request::get($request, "status", "");
         
@@ -85,6 +87,8 @@ class Board extends Base
      */
     public function add($request, $response, $args)
     {
+        $this->prepare($request);
+        
         return $this->view($response, 'board/add.html', []);
     }
     
@@ -135,6 +139,8 @@ class Board extends Base
      */
     public function edit($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $id = $args['id'] ?? '';
         if (empty($id)) {
             return $this->errorHtml($response, "分类 id 错误");

@@ -11,7 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use Skg\Board\Msg;
 use Skg\Board\Gable;
-use Skg\Board\Auth\User as AuthUser;
 
 /**
  * 管理员验证
@@ -32,14 +31,22 @@ class AdminCheckMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = Gable::$app->getResponseFactory()->createResponse(200);
+        $response = Msg::createResponse(200);
         
-        $isAdmin = AuthUser::isAdmin();
-        if (! $isAdmin) {
-            $template = $this->template();
-            
-            $body = Msg::toError("你没有权限访问该页面", "", 3, $template);
-            
+        $authUser = $request->getAttribute("auth-user");
+        
+        if (!$authUser->isLogin()) {
+            $body = $this->toMsg("请先登录");
+            return $response->withBody($body);
+        }
+        
+        if (! $authUser->isActive()) {
+            $body = $this->toMsg("账号不存在或者已被禁用");
+            return $response->withBody($body);
+        }
+        
+        if (! $authUser->isAdmin()) {
+            $body = $this->toMsg("你没有权限访问该页面");
             return $response->withBody($body);
         }
         
@@ -49,7 +56,19 @@ class AdminCheckMiddleware implements MiddlewareInterface
     /**
      * 模板
      */
-    public function template()
+    protected function toMsg($msg)
+    {
+        $template = $this->template();
+        
+        $body = Msg::toError($msg, "", 3, $template);
+        
+        return $body;
+    }
+    
+    /**
+     * 模板
+     */
+    protected function template()
     {
         $config = Gable::$di->get('config');
         

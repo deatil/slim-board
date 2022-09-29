@@ -7,10 +7,10 @@ namespace App\Controller\Admin;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
+use Skg\Board\Msg;
 use Skg\Board\Gable;
 use Skg\Board\Validation;
 use Skg\Board\Auth as BoardAuth;
-use Skg\Board\Auth\User as AuthUser;
 
 /**
  * 账号相关
@@ -39,11 +39,10 @@ class Auth extends Base
         ob_end_clean();
         
         // 输出图片
-        header('Content-type:image/jpeg');
-        $response
-            ->getBody()
-            ->write($captchaImage);
-        return $response;
+        $body = Msg::toData($captchaImage);
+        return Msg::createResponse(200)
+            ->withHeader("Content-type", "image/jpeg")
+            ->withBody($body);
     }
     
     /**
@@ -96,7 +95,8 @@ class Auth extends Base
         
         Gable::$di->get("session")->delete('captcha_id');
         
-        $userInfo = AuthUser::info();
+        $authUser = $request->getAttribute("auth-user");
+        $userInfo = $authUser->info();
         
         $check = BoardAuth::passwordVerify($password, $userInfo['password']);
         if (! $check) {

@@ -16,5 +16,5 @@ return array(
     'cbedd1c43698b6479c511903c3cb9bb6' => $vendorDir . '/toolkit/stdlib/src/func.php',
     'b33e3d135e5d9e47d845c576147bda89' => $vendorDir . '/php-di/php-di/src/functions.php',
     'e39a8b23c42d4e1452234d762b03835a' => $vendorDir . '/ramsey/uuid/src/functions.php',
-    '20a9a48818e1b04973b63867a3415994' => $baseDir . '/skg/board/helper.php',
+    '911511416bbd63fe29c2dcdd38d6c979' => $baseDir . '/skg/board/Support/helper.php',
 );

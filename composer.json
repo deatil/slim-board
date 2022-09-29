@@ -45,7 +45,7 @@
             "Skg\\Board\\": "skg/board/"
         },
         "files": [
-            "skg/board/helper.php"
+            "skg/board/Support/helper.php"
         ]
     },
     "repositories": {

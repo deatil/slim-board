@@ -8,8 +8,8 @@ use Skg\Board\Auth;
 use Skg\Board\Gable;
 use Skg\Board\Request;
 use Skg\Board\Validation;
-use Skg\Board\Auth\User as AuthUser;
 use Skg\Board\Page\Bootstrap as BootstrapPage; 
+
 use App\Model\User as UserModel;
 
 /**
@@ -25,12 +25,14 @@ class User extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $keyword = Request::get($request, "keyword", "");
         $status = Request::get($request, "status", "");
         
         $page = Request::get($request, "page", "1");
         
-        $limit = 6;
+        $limit = 10;
         $start = ((int) $page - 1) * $limit;
         
         $where = [];
@@ -63,7 +65,10 @@ class User extends Base
         $total = UserModel::getCount($where);
         
         // 分页页面
-        $pageHtml = BootstrapPage::make($limit, (int) $page, $total);
+        $pageHtml = BootstrapPage::make($limit, (int) $page, $total, false, [
+            'path' => $request->getUri()->getPath(),
+            'query' => $request->getQueryParams(),
+        ]);
         
         return $this->view($response, 'user/index.html', [
             'keyword' => $keyword,
@@ -81,6 +86,8 @@ class User extends Base
      */
     public function add($request, $response, $args)
     {
+        $this->prepare($request);
+        
         return $this->view($response, 'user/add.html', []);
     }
     
@@ -128,6 +135,8 @@ class User extends Base
      */
     public function edit($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $id = $args['id'] ?? '';
         if (empty($id)) {
             return $this->errorHtml($response, "账号 id 错误");
@@ -164,7 +173,8 @@ class User extends Base
             return $this->errorJson($response, $v);
         }
         
-        if (AuthUser::id() == $id) {
+        $authUser = $request->getAttribute("auth-user");
+        if ($authUser->id() == $id) {
             return $this->errorJson($response, "你不能修改自己的账号");
         }
         

@@ -16,30 +16,6 @@ use Skg\Board\Auth\User;
 class TwigRuntimeExtension
 {
     /**
-     * 账号信息
-     */
-    public function user(): array
-    {
-        return User::info();
-    }
-
-    /**
-     * 账号是否为管理
-     */
-    public function isAdmin(): bool
-    {
-        return User::isAdmin();
-    }
-
-    /**
-     * 账号是否登录
-     */
-    public function isLogin(): bool
-    {
-        return User::id() > 0;
-    }
-
-    /**
      * 静态文件根目录
      */
     public function assets(string $path): string

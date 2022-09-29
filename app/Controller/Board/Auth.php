@@ -7,6 +7,7 @@ namespace App\Controller\Board;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 
+use Skg\Board\Msg;
 use Skg\Board\Gable;
 use Skg\Board\Request;
 use Skg\Board\Validation;
@@ -41,11 +42,10 @@ class Auth extends Base
         ob_end_clean();
         
         // 输出图片
-        header('Content-type:image/jpeg');
-        $response
-            ->getBody()
-            ->write($captchaImage);
-        return $response;
+        $body = Msg::toData($captchaImage);
+        return Msg::createResponse(200)
+            ->withHeader("Content-type", "image/jpeg")
+            ->withBody($body);
     }
     
     /**

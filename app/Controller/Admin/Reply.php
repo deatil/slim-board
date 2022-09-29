@@ -22,6 +22,8 @@ class Reply extends Base
      */
     public function index($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $keyword = Request::get($request, "keyword", "");
         $status = Request::get($request, "status", "");
         
@@ -34,11 +36,11 @@ class Reply extends Base
         
         if (! empty($keyword)) {
             $where['AND']['OR'] = [
-                "content[~]" => $keyword,
+                "reply.content[~]" => $keyword,
             ];
         }
         if (! empty($status)) {
-            $where['AND']['status'] = $status ? 1 : 0;
+            $where['AND']['reply.status'] = $status ? 1 : 0;
         }
         
         $listWhere = [
@@ -47,7 +49,7 @@ class Reply extends Base
                 $limit
             ],
             "ORDER" => [
-                "add_time" => "DESC",
+                "reply.add_time" => "DESC",
             ],
         ];
         
@@ -58,7 +60,10 @@ class Reply extends Base
         $total = ReplyModel::getCount($where);
         
         // 分页页面
-        $pageHtml = BootstrapPage::make($limit, (int) $page, $total);
+        $pageHtml = BootstrapPage::make($limit, (int) $page, $total, false, [
+            'path' => $request->getUri()->getPath(),
+            'query' => $request->getQueryParams(),
+        ]);
         
         return $this->view($response, 'reply/index.html', [
             'keyword' => $keyword,
@@ -75,6 +80,8 @@ class Reply extends Base
      */
     public function edit($request, $response, $args)
     {
+        $this->prepare($request);
+        
         $id = $args['id'] ?? '';
         if (empty($id)) {
             return $this->errorHtml($response, "回复 id 错误");

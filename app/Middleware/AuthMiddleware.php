@@ -12,6 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Skg\Board\Msg;
 use Skg\Board\Gable;
 use Skg\Board\Auth\Auth as AuthTool;
+use Skg\Board\Auth\User as AuthUser;
+
+use App\Model\User as UserModel;
 
 /**
  * 登录验证
@@ -32,10 +35,7 @@ class AuthMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $app = Gable::$app;
         $di = Gable::$di;
-        
-        $response = $app->getResponseFactory()->createResponse(200);
         
         $id = $di->get("session")->get('login_auth');
         if (empty($id)) {
@@ -44,14 +44,25 @@ class AuthMiddleware implements MiddlewareInterface
                 $id = AuthTool::make()->decrypt($id);
             }
             
-            if (empty($id)) {
-                $body = Msg::toError("请先登录");
-                
-                return $response->withBody($body);
-            }
-            
             $di->get("session")->set('login_auth', $id);
         }
+        
+        if (empty($id)) {
+            $authUser = new AuthUser();
+            $authUser->withId(0);
+            $request->withAttribute("auth-user", $authUser);
+        
+            return $handler->handle($request);
+        }
+        
+        $userInfo = UserModel::getInfoById($id);
+        
+        $authUser = new AuthUser();
+        $authUser->withId($id);
+        $authUser->withUserInfo($userInfo);
+        
+        $request = $request->withAttribute("auth-user", $authUser);
+        // $authUser = $request->getAttribute("auth-user");
         
         return $handler->handle($request);
     }

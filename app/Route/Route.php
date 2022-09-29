@@ -40,10 +40,6 @@ class Route
      */
     protected static function board($app)
     {
-        // 首页
-        $indexController = BoardController\Index::class;
-        $app->get('/', [$indexController, 'index'])->setName('board.index');
-        
         // 账号相关
         $authController = BoardController\Auth::class;
         $app->get('/auth/captcha', [$authController, 'captcha'])->setName('board.auth-captcha');
@@ -55,23 +51,64 @@ class Route
         
         // 登录部分
         $app->group('', function (RouteCollectorProxy $group) {
+            // 首页
+            $indexController = BoardController\Index::class;
+            $group->get('/', [$indexController, 'index'])->setName('board.index');
+            
             // 账号信息
-            $profileController = BoardController\Profile::class;
-            $group->get('/profile', [$profileController, 'index'])->setName('board.profile');
-            $group->post('/profile', [$profileController, 'save'])->setName('board.profile-save');
-            $group->get('/profile/password', [$profileController, 'password'])->setName('board.profile-password');
-            $group->post('/profile/password', [$profileController, 'passwordSave'])->setName('board.profile-password-save');
+            $userController = BoardController\User::class;
+            $group->get('/user/{username}', [$userController, 'index'])->setName('board.user-index');
             
             // 话题
             $topicController = BoardController\Topic::class;
-            $group->get('/c/{slug}', [$topicController, 'index'])->setName('board.topic-index');
-            $group->get('/t/{id}', [$topicController, 'views'])->setName('board.topic-view');
-            $group->get('/topic/create', [$topicController, 'create'])->setName('board.topic-create');
-            $group->post('/topic/create', [$topicController, 'createSave'])->setName('board.topic-create-save');
-            $group->get('/topic/update/{id}', [$topicController, 'update'])->setName('board.topic-update');
-            $group->post('/topic/update/{id}', [$topicController, 'updateSave'])->setName('board.topic-update-save');
-            $group->post('/topic/delete/{id}', [$topicController, 'delete'])->setName('board.topic-delete');
-        })->add(new Middleware\AuthMiddleware());
+            
+            // 回复
+            $commentController = BoardController\Comment::class;
+            
+            // 验证登录
+            $group->group('', function (RouteCollectorProxy $group) use(
+                $topicController,
+                $commentController
+            ) {
+                // 账号信息
+                $profileController = BoardController\Profile::class;
+                $group->get('/profile', [$profileController, 'index'])->setName('board.profile');
+                $group->post('/profile', [$profileController, 'save'])->setName('board.profile-save');
+                $group->get('/profile/password', [$profileController, 'password'])->setName('board.profile-password');
+                $group->post('/profile/password', [$profileController, 'passwordSave'])->setName('board.profile-password-save');
+                $group->get('/profile/avatar', [$profileController, 'avatar'])->setName('board.profile-avatar');
+                $group->post('/profile/avatar', [$profileController, 'avatarSave'])->setName('board.profile-avatar-save');
+                
+                // 话题
+                $group->get('/topic/create', [$topicController, 'create'])->setName('board.topic-create');
+                $group->post('/topic/create', [$topicController, 'createSave'])->setName('board.topic-create-save');
+                $group->get('/topic/update/{id}', [$topicController, 'update'])->setName('board.topic-update');
+                $group->post('/topic/update/{id}', [$topicController, 'updateSave'])->setName('board.topic-update-save');
+                $group->post('/topic/delete/{id}', [$topicController, 'delete'])->setName('board.topic-delete');
+                $group->post('/topic/top/{id}', [$topicController, 'top'])->setName('board.topic-top');
+                $group->post('/topic/digest/{id}', [$topicController, 'digest'])->setName('board.topic-digest');
+                $group->post('/topic/close/{id}', [$topicController, 'close'])->setName('board.topic-close');
+                
+                // 回复
+                $group->post('/comment/create', [$commentController, 'createSave'])->setName('board.comment-create-save');
+                $group->get('/comment/update/{id}', [$commentController, 'update'])->setName('board.comment-update');
+                $group->post('/comment/update/{id}', [$commentController, 'updateSave'])->setName('board.comment-update-save');
+                $group->post('/comment/delete/{id}', [$commentController, 'delete'])->setName('board.comment-delete');
+                
+                // 上传
+                $uploadController = BoardController\Upload::class;
+                $group->post('/up/avatar', [$uploadController, 'avatarSave'])->setName('board.upload-avatar-save');
+            })
+            ->addMiddleware(new Middleware\CheckLoginMiddleware());
+            
+            // 回复
+            $group->get('/comment/{tid}', [$commentController, 'index'])->setName('board.comment-index');
+            
+            // 话题
+            $group->get('/topics/{slug}', [$topicController, 'index'])->setName('board.topic-index');
+            $group->get('/topic/{id}', [$topicController, 'detail'])->setName('board.topic-view');
+        })
+        ->add(new Middleware\AuthMiddleware());
     }
     
     /**
@@ -133,7 +170,7 @@ class Route
                 $group->post('/setting', [$settingController, 'save'])->setName('admin.setting.save');
             })->add(new Middleware\AdminAuthMiddleware());
         })
-        ->add(new Middleware\AuthMiddleware())
-        ->add(new Middleware\AdminCheckMiddleware());
+        ->add(new Middleware\AdminCheckMiddleware())
+        ->add(new Middleware\AuthMiddleware());
     }
 }

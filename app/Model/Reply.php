@@ -18,6 +18,7 @@ class Reply
     protected static $columns = [
         "reply.id",
         "reply.content",
+        "reply.user_id",
         "reply.status",
         "reply.add_time",
         "reply.add_ip",
@@ -140,13 +141,27 @@ class Reply
     }
 
     /**
-     * 更改信息
+     * 删除
      */
     public static function deleteById($id)
     {
         $data = Orm::delete("reply", [
             "AND" => [
                 "id[=]" => $id,
+            ]
+        ]);
+
+        return $data;
+    }
+
+    /**
+     * 删除
+     */
+    public static function deleteByTopicId($id)
+    {
+        $data = Orm::delete("reply", [
+            "AND" => [
+                "topic_id[=]" => $id,
             ]
         ]);
 

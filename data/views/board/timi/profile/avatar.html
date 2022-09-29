@@ -1,0 +1,106 @@
+{% extends "board/timi/common/base.html" %}
+
+{% block title %}更新头像{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+    .important { color: #336699; }
+    .d-none {display: none;}
+    .img-thumbnail {width: 200px;}
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="password-box">
+        更新头像
+
+        <hr />
+
+        <form method="post">
+            头像:<br>
+            <div class="mb-3">
+                <input type="text" 
+                    name="avatar" 
+                    value="{{ data.avatar }}" 
+                    class="form-control d-none" 
+                    id="avatarInput">
+                <div class="avatar-thumbnail">
+                    <div class="mb-2" id="avatar-preview">
+                        <img src="{{ avatar_url(data.avatar) }}" class="img-thumbnail" alt="头像">
+                    </div>
+                    
+                    <span id="btn-upload-avatar"></button>
+                </div>
+            </div>
+            
+            <button type="button" class="layui-btn js-save-button">保存</button>
+        </form> 
+
+    </div>
+{% endblock %}
+
+{% block script %}
+<script src='{{ board_assets("js/jquery-3.4.1.min.js") }}' type="text/javascript"></script>
+<script src='{{ board_assets("js/layer/layer.js") }}' type="text/javascript"></script>
+<link href='{{ board_assets("js/huploadify/Huploadify.css") }}' rel="stylesheet">
+<script src='{{ board_assets("js/huploadify/jquery.Huploadify.js") }}' type="text/javascript"></script>
+<script type="text/javascript">
+(function($) {
+    "use strict";
+    
+    // 上传头像
+    $('#btn-upload-avatar').Huploadify({
+        auto: true,
+        fileTypeExts: '*.png;*.jpg;*.JPG;*.bmp;*.gif',// 不限制上传文件请修改成'*.*'
+        multi: true,
+        fileSizeLimit: 1*1024*1024, // 大小限制
+        uploader : '{{ url_for("board.upload-avatar-save") }}', // 文件上传目标地址
+        buttonText : '选择文件',
+        fileObjName : 'file',
+        btnClass: 'btn btn-primary btn-sm',
+        showUploadedPercent: false,
+        onUploadSuccess : function(file, data) {
+            data = $.parseJSON(data);
+            if (data.code == 0) {
+                var filename = data.data.filename;
+                var url = data.data.url;
+                var $img = $('#avatar-preview').find('img');
+                
+                $img.attr('src', url);
+                $img.attr('alt', file.name);
+                
+                $('#avatarInput').val(filename);
+            } else {
+                layer.msg("上传失败：" + data.message);
+            }
+        }
+    });
+    
+    // 确认
+    $(".js-save-button").click(function(e) {
+        e.stopPropagation;
+        e.preventDefault;
+
+        var avatar = $("#avatarInput").val();
+
+        var url = "{{ url_for('board.profile-avatar-save') }}";
+        $.post(url, {
+            avatar: avatar,
+        }, function(data) {
+            if (data.code == 0) {
+                layer.msg("更新头像成功");
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                layer.msg(data.msg);
+            }
+        }).fail(function (xhr, status, info) {
+            layer.msg("请求失败");
+        });
+    });
+})(jQuery);
+</script>
+{% endblock %}

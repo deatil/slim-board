@@ -30,5 +30,5 @@ return [
     // 头像链接根路径
     'avatar_url' => '/upload/avatar',
     // 默认头像
-    'avatar_default' => '/upload/avatar/avatar-default.jpg',
+    'avatar_default' => '/static/board/image/avatar-default.jpg',
 ];

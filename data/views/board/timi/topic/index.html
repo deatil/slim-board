@@ -1,0 +1,75 @@
+{% extends "board/timi/common/base.html" %}
+
+{% block title %}{{ boardInfo['name'] }} 话题{% endblock %}
+
+{% block content %}
+<div class="topic-title">
+    {{ boardInfo['name'] }}
+</div>
+
+<hr />
+
+<div class="topic-list">
+    <table class="table table-bordered table-hover table-head-bg-success">
+        <thead>
+            <tr>
+                <th>标题</th>
+                <th>浏览</th>
+                <th>回复</th>
+                <th>作者</th>
+                <th>添加时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if list %}
+                {% for item in list %}
+                    <tr>
+                        <td width="210">
+                            {% if item.is_top == 1 %}<span class="text-secondary">[顶]</span>{% endif %}
+                            {% if item.is_digest == 1 %}<span class="text-success">[精]</span>{% endif %}
+                            
+                            <a href="{{ url_for('board.topic-view', {'id': item.id}) }}">
+                                {{ item.title }}
+                            </a>
+                        </td>
+                        <td width="110">
+                            {{ item.views }}
+                        </td>
+                        <td width="110">
+                            {{ item.replys }}
+                        </td>
+                        <td width="110">
+                            <span class="text-muted">
+                                {{ item.user.nickname }}
+                            </span>
+                        </td>
+                        <td width="170">
+                            <span title="添加时间">
+                                <i class="far fa-clock text-muted"></i>
+                                {{ item.add_time|date("Y-m-d H:i:s") }}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">
+                        <div class="nodata">
+                            无数据
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+
+        </tbody>
+    </table>
+
+</div>
+
+{% if list %}
+    <div class="topic-page">
+        {{ pageHtml | raw }}
+    </div>
+{% endif %}
+
+{% endblock %}

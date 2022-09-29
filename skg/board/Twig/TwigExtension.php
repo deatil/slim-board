@@ -29,9 +29,6 @@ class TwigExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('user', [TwigRuntimeExtension::class, 'user']),
-            new TwigFunction('is_admin', [TwigRuntimeExtension::class, 'isAdmin']),
-            new TwigFunction('is_login', [TwigRuntimeExtension::class, 'isLogin']),
             new TwigFunction('assets', [TwigRuntimeExtension::class, 'assets']),
             new TwigFunction('board_assets', [TwigRuntimeExtension::class, 'boardAssets']),
             new TwigFunction('admin_assets', [TwigRuntimeExtension::class, 'adminAssets']),
