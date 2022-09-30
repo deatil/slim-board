@@ -94,6 +94,7 @@ class Route
                 $group->get('/comment/update/{id}', [$commentController, 'update'])->setName('board.comment-update');
                 $group->post('/comment/update/{id}', [$commentController, 'updateSave'])->setName('board.comment-update-save');
                 $group->post('/comment/delete/{id}', [$commentController, 'delete'])->setName('board.comment-delete');
+                $group->post('/comment/top/{id}', [$commentController, 'top'])->setName('board.comment-top');
                 
                 // 上传
                 $uploadController = BoardController\Upload::class;
@@ -149,11 +150,11 @@ class Route
                 $group->post('/topic/delete/{id}', [$topicController, 'delete'])->setName('admin.topic.delete');
                 
                 // 回复管理
-                $replyController = AdminController\Reply::class;
-                $group->get('/reply/index', [$replyController, 'index'])->setName('admin.reply.index');
-                $group->get('/reply/edit/{id}', [$replyController, 'edit'])->setName('admin.reply.edit');
-                $group->post('/reply/edit/{id}', [$replyController, 'editSave'])->setName('admin.reply.edit-save');
-                $group->post('/reply/delete/{id}', [$replyController, 'delete'])->setName('admin.reply.delete');
+                $commentController = AdminController\Comment::class;
+                $group->get('/comment/index', [$commentController, 'index'])->setName('admin.comment.index');
+                $group->get('/comment/edit/{id}', [$commentController, 'edit'])->setName('admin.comment.edit');
+                $group->post('/comment/edit/{id}', [$commentController, 'editSave'])->setName('admin.comment.edit-save');
+                $group->post('/comment/delete/{id}', [$commentController, 'delete'])->setName('admin.comment.delete');
                 
                 // 账号管理
                 $userController = AdminController\User::class;

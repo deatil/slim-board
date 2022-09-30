@@ -140,7 +140,7 @@
                         <ol class="activity-feed">
                             {% if newReplyTopicList %}
                                 {% for newReplyItem in newReplyTopicList %}
-                                    <li class="feed-item feed-item-secondary">
+                                    <li class="feed-item feed-item-success">
                                         <time class="date" datetime='{{ newReplyItem.add_time|date("Y-m-d H:i:s") }}'>
                                             {{ newReplyItem.last_reply|date("Y-m-d H:i:s") }}
                                         </time>

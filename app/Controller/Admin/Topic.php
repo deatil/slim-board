@@ -10,7 +10,7 @@ use Skg\Board\Page\Bootstrap as BootstrapPage;
 
 use App\Model\Board as BoardModel;
 use App\Model\Topic as TopicModel;
-use App\Model\Reply as ReplyModel;
+use App\Model\Comment as Comment;
 
 /**
  * 话题管理
@@ -180,7 +180,7 @@ class Topic extends Base
         }
         
         // 删除回复
-        ReplyModel::deleteByTopicId($id);
+        Comment::deleteByTopicId($id);
 
         return $this->successJson($response, '删除成功');
     }

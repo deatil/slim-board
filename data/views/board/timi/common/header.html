@@ -1,6 +1,8 @@
 <div class="logo">
     <a href="{{ url_for('board.index') }}" title="{{ website_setting.website_name }}">
         <img src='{{ board_assets("image/logo.png") }}' alt="{{ website_setting.website_name }}">
+    </a>
+    <a href="{{ url_for('board.index') }}" title="{{ website_setting.website_name }}">
         <span class="website-name">
             {{ website_setting.website_name }}
         </span>
@@ -9,21 +11,41 @@
 
 {% set userinfo = auth_user.info() %}
 
-<div class="user">
+<div class="header-user">
     {% if auth_user.isLogin() == 1 %}
-        {{ userinfo['nickname'] }}
-
-        <a href="{{ url_for('board.profile') }}">更新信息</a>
-        <a href="{{ url_for('board.profile-avatar') }}">更新头像</a>
-        <a href="{{ url_for('board.profile-password') }}">更改密码</a>
+        <span class="user-item">
+            {{ userinfo['nickname'] }}
+        </span>
+        
+        <span class="user-item">
+            <a href="{{ url_for('board.profile') }}">更新账号</a>
+        </span>
+        <span class="user-item">
+            <a href="{{ url_for('board.profile-avatar') }}">更新头像</a>
+        </span>
+        <span class="user-item">
+            <a href="{{ url_for('board.profile-password') }}">更改密码</a>
+        </span>
         
         {% if auth_user.isAdmin() == 1 %}
-            <a href="{{ url_for('admin.index') }}" target="_blank">管理</a>
+            <span class="user-item">
+                <a href="{{ url_for('admin.index') }}" target="_blank">管理</a>
+            </span>
         {% endif %}
         
-        <a href="{{ url_for('board.auth-logout') }}">退出登录</a>
+        <span class="user-item">
+            <a href="{{ url_for('board.auth-logout') }}">退出登录</a>
+        </span>
     {% else %}
-        <a href="{{ url_for('board.auth-login') }}">马上登录</a>
+        <span class="user-item">
+            <a href="{{ url_for('board.auth-login') }}">登录</a>
+        </span>
+        
+        <span class="user-item">
+            <a href="{{ url_for('board.auth-register') }}">
+                注册账号
+            </a>
+        </span>
     {% endif %}
 </div>
 

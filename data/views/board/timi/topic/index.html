@@ -3,8 +3,13 @@
 {% block title %}{{ boardInfo['name'] }} 话题{% endblock %}
 
 {% block content %}
-<div class="topic-title">
-    {{ boardInfo['name'] }}
+<div class="topic-meta">
+    <div class="topic-title">
+        {{ boardInfo['name'] }}
+    </div>
+    <div class="topic-desc">
+        {{ boardInfo['desc'] }}
+    </div>
 </div>
 
 <hr />

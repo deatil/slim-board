@@ -7,7 +7,8 @@ namespace App\Controller\Admin;
 use Skg\Board\Gable;
 use Skg\Board\Request;
 use Skg\Board\Page\Bootstrap as BootstrapPage; 
-use App\Model\Reply as ReplyModel;
+
+use App\Model\Comment as CommentModel;
 
 /**
  * 回复管理
@@ -15,7 +16,7 @@ use App\Model\Reply as ReplyModel;
  * @create 2022-7-26
  * @author deatil
  */
-class Reply extends Base
+class Comment extends Base
 {
     /**
      * 列表
@@ -36,11 +37,11 @@ class Reply extends Base
         
         if (! empty($keyword)) {
             $where['AND']['OR'] = [
-                "reply.content[~]" => $keyword,
+                "comment.content[~]" => $keyword,
             ];
         }
         if (! empty($status)) {
-            $where['AND']['reply.status'] = $status ? 1 : 0;
+            $where['AND']['comment.status'] = $status ? 1 : 0;
         }
         
         $listWhere = [
@@ -49,15 +50,15 @@ class Reply extends Base
                 $limit
             ],
             "ORDER" => [
-                "reply.add_time" => "DESC",
+                "comment.add_time" => "DESC",
             ],
         ];
         
         $listWhere = array_merge($where, $listWhere);
         
-        $list = ReplyModel::getList($listWhere);
+        $list = CommentModel::getList($listWhere);
         
-        $total = ReplyModel::getCount($where);
+        $total = CommentModel::getCount($where);
         
         // 分页页面
         $pageHtml = BootstrapPage::make($limit, (int) $page, $total, false, [
@@ -65,7 +66,7 @@ class Reply extends Base
             'query' => $request->getQueryParams(),
         ]);
         
-        return $this->view($response, 'reply/index.html', [
+        return $this->view($response, 'comment/index.html', [
             'keyword' => $keyword,
             'status' => $status,
             'page' => $page,
@@ -87,12 +88,12 @@ class Reply extends Base
             return $this->errorHtml($response, "回复 id 错误");
         }
         
-        $data = ReplyModel::getInfoById($id);
+        $data = CommentModel::getInfoById($id);
         if (empty($data)) {
             return $this->errorHtml($response, "回复数据不存在");
         }
         
-        return $this->view($response, 'reply/edit.html', [
+        return $this->view($response, 'comment/edit.html', [
             'data' => $data,
         ]);
     }
@@ -111,7 +112,7 @@ class Reply extends Base
         
         $status = (isset($data['status']) && $data['status'] == 1) ? 1 : 0;
         
-        $status = ReplyModel::updateById($id, [
+        $status = CommentModel::updateById($id, [
             "status" => $status,
         ]);
         if (!$status) {
@@ -131,7 +132,7 @@ class Reply extends Base
             return $this->errorJson($response, "回复 id 错误");
         }
         
-        $status = ReplyModel::deleteById($id);
+        $status = CommentModel::deleteById($id);
         if (!$status) {
             return $this->errorJson($response, '删除失败');
         }

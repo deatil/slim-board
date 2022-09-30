@@ -179,7 +179,13 @@
                                                     {% if item.is_digest == 1 %}<span class="text-success">[精]</span>{% endif %}
                                                     {% if item.is_close == 1 %}<span class="text-danger">[关]</span>{% endif %}
                                                     
-                                                    {{ item.title }}
+                                                    <a href="{{ url_for('board.topic-view', {'id': item.id}) }}" 
+                                                        target="_blank"
+                                                        title="{{ item.title }}"
+                                                        class="text-dark text-bold"
+                                                    >
+                                                        {{ item.title }}
+                                                    </a>
                                                     
                                                     <br />
                                                     

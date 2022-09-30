@@ -1,6 +1,6 @@
 {% extends "board/timi/common/base.html" %}
 
-{% block title %}话题详情{% endblock %}
+{% block title %}{{ data['title'] }} - 话题{% endblock %}
 
 {% block content %}
 <div class="topic-title">
@@ -13,6 +13,7 @@
         / <a href="{{ url_for('board.user-index', {username: user.username}) }}" >{{ user.nickname }} </a>
         / {{ data.add_time|date("Y-m-d H:i:s") }}
         / {{ data.replys }}回复
+        / {{ data.views }}阅读
     </div>
     
     <div class="topic-content-data">
@@ -53,6 +54,13 @@
         {% for comment in comments %}
             <li>
                 <div class="comment-meta">
+                    {% if comment.is_top == 1 %}
+                        <span class="comment-top-icon">
+                            [顶]
+                        </span>
+                        / 
+                    {% endif %}
+                
                     <a href="{{ url_for('board.user-index', {username: comment.user.username}) }}" >
                         {{ comment.user.nickname }} 
                     </a>
@@ -62,6 +70,14 @@
                     
                     {% if auth_user.isAdmin() == 1 or comment['user_id'] == auth_user['id'] %}
                         / <a href="{{ url_for('board.comment-update', {id: comment.id}) }}" >编辑</a>
+            
+                        {% if auth_user.isAdmin() == 1 %}
+                            / <a href="javascript:;" 
+                                data-url="{{ url_for('board.comment-top', {id: comment.id}) }}" 
+                                data-status="{{ comment.is_top }}"
+                                class="js-comment-mod-btn">{{ comment.is_top ? "取消置顶" : "置顶回复" }}</a>
+                        {% endif %}
+            
                         / <a href="javascript:;" 
                             data-url="{{ url_for('board.comment-delete', {id: comment.id}) }}" 
                             class="js-comment-delete-btn">删除</a>
@@ -108,18 +124,20 @@
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href='{{ board_assets("js/highlight/styles/monokai-sublime.min.css") }}' />
-<link rel="stylesheet" href='{{ board_assets("js/katex/katex.min.css") }}' />
-<link rel="stylesheet" href='{{ board_assets("js/quill/quill.snow.css") }}' />
-<style>
-body > #standalone-container {
-    margin: 50px auto;
-    max-width: 720px;
-}
-#editor-container {
-    height: 150px;
-}
-</style>
+    {{ parent() }}
+    
+    <link rel="stylesheet" href='{{ board_assets("js/highlight/styles/monokai-sublime.min.css") }}' />
+    <link rel="stylesheet" href='{{ board_assets("js/katex/katex.min.css") }}' />
+    <link rel="stylesheet" href='{{ board_assets("js/quill/quill.snow.css") }}' />
+    <style>
+    body > #standalone-container {
+        margin: 50px auto;
+        max-width: 720px;
+    }
+    #editor-container {
+        height: 150px;
+    }
+    </style>
 {% endblock %}
 
 {% block script %}
@@ -215,6 +233,43 @@ $(function() {
             }
         }).fail(function (xhr, status, info) {
             layer.msg("请求失败");
+        });
+    });
+
+    // 操作
+    $('.js-comment-mod-btn').click(function() {
+        var url = $(this).data('url');
+        var status = $(this).data('status');
+        var msg = $(this).text();
+        
+        if (status != 1) {
+            status = 1;
+        } else {
+            status = 0;
+        }
+        
+        layer.confirm('您确定要' + msg + '吗？', {
+            btn: ['确定', '取消']
+        }, function(index){
+            $.post(url, {
+                status: status,
+            }, function(data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg, {
+                        icon: 1
+                    });
+
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    layer.msg(data.msg, {
+                        icon: 2
+                    });
+                }
+            }).fail(function (xhr, status, info) {
+                layer.msg("请求失败");
+            });
         });
     });
 

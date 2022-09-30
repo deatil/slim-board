@@ -173,6 +173,8 @@ class Auth extends Base
         $v = Validation::check($data, [
             ['username', 'required', 'msg' => '账号不能为空'], 
             ['username', 'min:3', 'msg' => '账号长度不能小于3个'], 
+            ['email', 'required', 'msg' => '邮箱不能为空'], 
+            ['email', 'email', 'msg' => '邮箱格式错误'], 
             ['password', 'required', 'msg' => '密码不能为空'], 
             ['password', 'min:3', 'msg' => '密码长度不能小于3个'], 
             ['captcha', 'required', 'msg' => '验证码不能为空'], 
@@ -184,6 +186,7 @@ class Auth extends Base
         }
         
         $username = $data['username'] ?? "";
+        $email = $data['email'] ?? "";
         $password = $data['password'] ?? "";
         $captcha = $data['captcha'] ?? "";
         
@@ -212,6 +215,7 @@ class Auth extends Base
             "username" => $username,
             "nickname" => $username,
             "password" => $password,
+            "email" => $email,
             "add_time" => time(),
             "add_ip" => $addIp,
         ]);

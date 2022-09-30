@@ -22,18 +22,20 @@
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href='{{ board_assets("js/highlight/styles/monokai-sublime.min.css") }}' />
-<link rel="stylesheet" href='{{ board_assets("js/katex/katex.min.css") }}' />
-<link rel="stylesheet" href='{{ board_assets("js/quill/quill.snow.css") }}' />
-<style>
-body > #standalone-container {
-    margin: 50px auto;
-    max-width: 720px;
-}
-#editor-container {
-    height: 150px;
-}
-</style>
+    {{ parent() }}
+    
+    <link rel="stylesheet" href='{{ board_assets("js/highlight/styles/monokai-sublime.min.css") }}' />
+    <link rel="stylesheet" href='{{ board_assets("js/katex/katex.min.css") }}' />
+    <link rel="stylesheet" href='{{ board_assets("js/quill/quill.snow.css") }}' />
+    <style>
+    body > #standalone-container {
+        margin: 50px auto;
+        max-width: 720px;
+    }
+    #editor-container {
+        height: 150px;
+    }
+    </style>
 {% endblock %}
 
 {% block script %}

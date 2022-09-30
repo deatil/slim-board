@@ -12,6 +12,39 @@
  - Fileinfo PHP Extension
 
 
+### 截图预览
+
+<table>
+    <tr>
+        <td width="50%">
+            <center>
+                <img alt="登录" src="https://user-images.githubusercontent.com/24578855/193317616-3e36a5d9-04eb-4d77-a270-edff1329d8f2.png" />
+            </center>
+        </td>
+        <td width="50%">
+            <center>
+                <img alt="控制台" src="https://user-images.githubusercontent.com/24578855/193316333-d1272c1b-c750-4082-bc34-b89923bddd4b.png" />
+            </center>
+        </td>
+    </tr>
+    <tr>
+        <td width="50%">
+            <center>
+                <img alt="文章管理" src="https://user-images.githubusercontent.com/24578855/193316606-71e3773e-bbe3-49fd-8a90-f3a01c4180d7.png" />
+            </center>
+        </td>
+        <td width="50%">
+            <center>
+                <img alt="分类管理" src="https://user-images.githubusercontent.com/24578855/193316570-8340a36b-addd-4074-a2e1-09e165b299e7.png" />
+            </center>
+        </td>
+    </tr>
+</table>
+
+更多截图
+[slim-board 截图](https://github.com/deatil/slim-board/issues/1)
+
+
 ## 安装步骤
 
 1. 首先下载

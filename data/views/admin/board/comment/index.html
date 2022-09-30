@@ -127,7 +127,7 @@
                                                     {{ item.id }}
                                                 </th>
                                                 <td>
-                                                    {{ item.content }}
+                                                    {{ item.content | raw }}
                                                 </td>
                                                 <td width="80">
                                                     {{ item.user.nickname }}
@@ -145,7 +145,7 @@
                                                 </td>
                                                 <td width="165" class="text-center">
                                                     <a class="btn btn-primary btn-xs" 
-                                                        href="{{ url_for('admin.reply.edit', {'id': item.id}) }}" 
+                                                        href="{{ url_for('admin.comment.edit', {'id': item.id}) }}" 
                                                     >
                                                         <i class="fa fa-edit"></i>
                                                         编辑
@@ -153,7 +153,7 @@
                                                     
                                                     <a href="javascript:;" 
                                                         class="btn btn-danger btn-xs js-delete-btn"
-                                                        data-url="{{ url_for('admin.reply.delete', {'id': item.id}) }}"
+                                                        data-url="{{ url_for('admin.comment.delete', {'id': item.id}) }}"
                                                     >
                                                         <i class="fa fa-times"></i>
                                                         删除
@@ -187,7 +187,14 @@
 
 {% endblock %}
 
+{% block head %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href='{{ admin_assets("js/katex/katex.min.css") }}' />
+{% endblock %}
+
 {% block script_append %}
+<script src='{{ admin_assets("js/katex/katex.min.js") }}'></script>
 <script>
 $(function() {
     $(".nav-item.board-topic").addClass("active submenu");

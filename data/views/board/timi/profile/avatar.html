@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ parent() }}
+    
     <style type="text/css">
     .important { color: #336699; }
     .d-none {display: none;}
@@ -12,13 +13,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="password-box">
+<div class="password-box">
+    <div class="box-title">
         更新头像
+    </div>
+    
+    <hr />
 
-        <hr />
-
-        <form method="post">
-            头像:<br>
+    <form method="post" class="box-form">
+        <div class="form-item">
+            头像:
             <div class="mb-3">
                 <input type="text" 
                     name="avatar" 
@@ -33,11 +37,14 @@
                     <span id="btn-upload-avatar"></button>
                 </div>
             </div>
-            
+        </div>
+        
+        <div class="form-item">
             <button type="button" class="layui-btn js-save-button">保存</button>
-        </form> 
+        </div>
+    </form> 
 
-    </div>
+</div>
 {% endblock %}
 
 {% block script %}

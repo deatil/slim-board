@@ -10,7 +10,7 @@ use Skg\Board\Validation;
 use Skg\Board\Page\Bootstrap as BootstrapPage; 
 
 use App\Model\Topic as TopicModel;
-use App\Model\Reply as ReplyModel;
+use App\Model\Comment as CommentModel;
 
 /**
  * 回复回复
@@ -43,8 +43,8 @@ class Comment extends Base
         $start = ((int) $page - 1) * $limit;
         
         $where = [];
-        $where['AND']['reply.topic_id'] = $tid;
-        $where['AND']['reply.status'] = 1;
+        $where['AND']['comment.topic_id'] = $tid;
+        $where['AND']['comment.status'] = 1;
         
         $listWhere = [
             "LIMIT" => [
@@ -52,16 +52,16 @@ class Comment extends Base
                 $limit
             ],
             "ORDER" => [
-                "reply.is_top" => "ASC",
-                "reply.add_time" => "ASC",
+                "comment.is_top" => "ASC",
+                "comment.add_time" => "ASC",
             ],
         ];
         
         $listWhere = array_merge($where, $listWhere);
         
-        $list = ReplyModel::getList($listWhere);
+        $list = CommentModel::getList($listWhere);
         
-        $total = ReplyModel::getCount($where);
+        $total = CommentModel::getCount($where);
         
         // 分页页面
         $pageHtml = BootstrapPage::make($limit, (int) $page, $total, false, [
@@ -102,7 +102,7 @@ class Comment extends Base
             return $this->errorJson($response, "回复失败，话题不存在");
         }
         
-        $status = ReplyModel::create([
+        $status = CommentModel::create([
             "topic_id" => $data['tid'],
             "reply_id" => $data['reply_id'] ?? 0,
             "user_id" => $user['id'],
@@ -115,7 +115,7 @@ class Comment extends Base
         }
         
         // 更新回复数
-        $replyTotal = ReplyModel::getCount([
+        $replyTotal = CommentModel::getCount([
             'topic_id' => $data['tid'],
         ]);
         TopicModel::updateById($data['tid'], [
@@ -139,7 +139,7 @@ class Comment extends Base
             return $this->errorHtml($response, "回复数据不存在");
         }
         
-        $data = ReplyModel::getInfoById($id);
+        $data = CommentModel::getInfoById($id);
         if (empty($data)) {
             return $this->errorHtml($response, "回复数据不存在");
         }
@@ -159,7 +159,7 @@ class Comment extends Base
             return $this->errorJson($response, "回复数据不存在");
         }
         
-        $replyData = ReplyModel::getInfoById($id);
+        $replyData = CommentModel::getInfoById($id);
         if (empty($replyData)) {
             return $this->errorJson($response, "回复数据不存在");
         }
@@ -179,7 +179,7 @@ class Comment extends Base
             return $this->errorJson($response, $v);
         }
         
-        $status = ReplyModel::updateById($id, [
+        $status = CommentModel::updateById($id, [
             "content" => $data['comment'],
         ]);
         if (!$status) {
@@ -199,7 +199,7 @@ class Comment extends Base
             return $this->errorJson($response, "回复 id 错误");
         }
         
-        $data = ReplyModel::getInfoById($id);
+        $data = CommentModel::getInfoById($id);
         if (empty($data)) {
             return $this->errorJson($response, "回复数据不存在");
         }
@@ -209,13 +209,13 @@ class Comment extends Base
             return $this->errorJson($response, "你不能删除该回复");
         }
         
-        $status = ReplyModel::deleteById($id);
+        $status = CommentModel::deleteById($id);
         if (! $status) {
             return $this->errorJson($response, '删除回复失败');
         }
         
         // 更新回复数
-        $replyTotal = ReplyModel::getCount([
+        $replyTotal = CommentModel::getCount([
             'topic_id' => $data['topic_id'],
         ]);
         TopicModel::updateById($data['topic_id'], [
@@ -224,4 +224,38 @@ class Comment extends Base
 
         return $this->successJson($response, '删除回复成功');
     }
+    
+    /**
+     * 置顶
+     */
+    public function top($request, $response, $args)
+    {
+        $id = $args['id'] ?? '';
+        if (empty($id)) {
+            return $this->errorJson($response, "回复 id 错误");
+        }
+        
+        $data = $request->getParsedBody();
+        $isStatus = $data['status'] ?? 0;
+        
+        $data = CommentModel::getInfoById($id);
+        if (empty($data)) {
+            return $this->errorJson($response, "回复数据不存在");
+        }
+        
+        $authUser = $this->getAuthUser($request);
+        if (! $authUser->isAdmin()) {
+            return $this->errorJson($response, "你不能置顶该回复");
+        }
+        
+        $status = CommentModel::updateById($id, [
+            "is_top" => ($isStatus == 1) ? 1 : 0,
+        ]);
+        if (! $status) {
+            return $this->errorJson($response, '设置失败');
+        }
+
+        return $this->successJson($response, '设置成功');
+    }
+
 }

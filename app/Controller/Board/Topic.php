@@ -11,7 +11,7 @@ use Skg\Board\Page\Bootstrap as BootstrapPage;
 
 use App\Model\Board as BoardModel;
 use App\Model\Topic as TopicModel;
-use App\Model\Reply as ReplyModel;
+use App\Model\Comment as Comment;
 use App\Model\User as UserModel;
 
 /**
@@ -125,20 +125,21 @@ class Topic extends Base
         $user = UserModel::getInfoById($data['user_id']);
         
         // 回复列表
-        $comments = ReplyModel::getList([
+        $comments = Comment::getList([
             'AND' => [
-                'reply.topic_id' => $id,
-                'reply.status' => 1,
+                'comment.topic_id' => $id,
+                'comment.status' => 1,
             ],
             "LIMIT" => [0, 10],
             "ORDER" => [
-                "reply.add_time" => "ASC",
+                "comment.is_top" => "DESC",
+                "comment.add_time" => "ASC",
             ],
         ]);
-        $commentTotal = ReplyModel::getCount([
+        $commentTotal = Comment::getCount([
             'AND' => [
-                'reply.topic_id' => $id,
-                'reply.status' => 1,
+                'comment.topic_id' => $id,
+                'comment.status' => 1,
             ],
         ]);
         
@@ -315,7 +316,7 @@ class Topic extends Base
         }
         
         // 删除回复
-        ReplyModel::deleteByTopicId($id);
+        Comment::deleteByTopicId($id);
 
         return $this->successJson($response, '删除话题成功');
     }

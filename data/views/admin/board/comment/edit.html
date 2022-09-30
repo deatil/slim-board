@@ -106,7 +106,7 @@ $(function() {
 
         var data = $(".reply-form").serialize();
 
-        var url = "{{ url_for('admin.reply.edit-save', {'id': data.id}) }}";
+        var url = "{{ url_for('admin.comment.edit-save', {'id': data.id}) }}";
         $.post(url, data, function(data) {
             if (data.code == 0) {
                 layer.msg("编辑成功");

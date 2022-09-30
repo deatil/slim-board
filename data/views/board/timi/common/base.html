@@ -7,24 +7,31 @@
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <title>{% block title %}{% endblock %} - Board</title>
-    {% block head %}{% endblock %}
+    {% block head %}
+        <link rel="stylesheet" href='{{ board_assets("css/app.css") }}'>
+    {% endblock %}
+    {% block head_append %}{% endblock %}
 </head>
 
 {% block body %}
 <body>
-    <div class="box">
-        <div id="header">
-            {% block header %}
-                {% include 'board/timi/common/header.html' %}
-            {% endblock %}
-        </div>
-        <div id="content">{% block content %}{% endblock %}</div>
-        <div id="footer">
-            {% block footer %}
-                {% include 'board/timi/common/footer.html' %}
-            {% endblock %}
-        </div>
+    <div class="slim-box">
+        <div class="slim-content">
+            <div id="header">
+                {% block header %}
+                    {% include 'board/timi/common/header.html' %}
+                {% endblock %}
+            </div>
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            <div id="footer">
+                {% block footer %}
+                    {% include 'board/timi/common/footer.html' %}
+                {% endblock %}
+            </div>
 
+        </div>
     </div>
     
     {% block script %}{% endblock %}

@@ -12,16 +12,17 @@ use Skg\Board\Orm;
  * @create 2022-7-29
  * @author deatil
  */
-class Reply
+class Comment
 {
     // 显示列表数据
     protected static $columns = [
-        "reply.id",
-        "reply.content",
-        "reply.user_id",
-        "reply.status",
-        "reply.add_time",
-        "reply.add_ip",
+        "comment.id",
+        "comment.content",
+        "comment.user_id",
+        "comment.is_top",
+        "comment.status",
+        "comment.add_time",
+        "comment.add_ip",
 
         "topic" => [
             "topic.title",
@@ -42,7 +43,7 @@ class Reply
      */
     public static function getList(array $where = [])
     {
-        $data = Orm::select("reply", [
+        $data = Orm::select("comment", [
             "[>]topic" => ["topic_id" => "id"],
             "[>]user" => ["user_id" => "id"],
         ], static::$columns, $where);
@@ -55,10 +56,10 @@ class Reply
      */
     public static function getListByTopicId($id, $start = 0, $limit = 5)
     {
-        $data = Orm::select("reply", [
+        $data = Orm::select("comment", [
             "[>]topic" => ["topic_id" => "id"],
             "[>]user" => ["user_id" => "id"],
-            "[>]reply" => ["reply_id" => "id"],
+            "[>]comment" => ["reply_id" => "id"],
         ], static::$columns, [
             "topic_id[=]" => $id,
             "LIMIT" => [
@@ -78,10 +79,10 @@ class Reply
      */
     public static function getListByUserId($id, $start = 0, $limit = 5)
     {
-        $data = Orm::select("reply", [
+        $data = Orm::select("comment", [
             "[>]topic" => ["topic_id" => "id"],
             "[>]user" => ["user_id" => "id"],
-            "[>]reply" => ["reply_id" => "id"],
+            "[>]comment" => ["reply_id" => "id"],
         ], static::$columns, [
             "user_id[=]" => $id,
             "LIMIT" => [
@@ -101,7 +102,7 @@ class Reply
      */
     public static function getCount(array $where = [])
     {
-        $data = Orm::count("reply", $where);
+        $data = Orm::count("comment", $where);
 
         return $data;
     }
@@ -111,7 +112,7 @@ class Reply
      */
     public static function getInfoById($id)
     {
-        $data = Orm::get("reply",  "*", [
+        $data = Orm::get("comment",  "*", [
             "id[=]" => $id
         ]);
 
@@ -123,7 +124,7 @@ class Reply
      */
     public static function updateById($id, array $data = [])
     {
-        $data = Orm::update("reply",  $data, [
+        $data = Orm::update("comment",  $data, [
             "id[=]" => $id,
         ]);
 
@@ -135,7 +136,7 @@ class Reply
      */
     public static function create(array $data = [])
     {
-        $ret = Orm::insert("reply", $data);
+        $ret = Orm::insert("comment", $data);
 
         return $ret;
     }
@@ -145,7 +146,7 @@ class Reply
      */
     public static function deleteById($id)
     {
-        $data = Orm::delete("reply", [
+        $data = Orm::delete("comment", [
             "AND" => [
                 "id[=]" => $id,
             ]
@@ -159,7 +160,7 @@ class Reply
      */
     public static function deleteByTopicId($id)
     {
-        $data = Orm::delete("reply", [
+        $data = Orm::delete("comment", [
             "AND" => [
                 "topic_id[=]" => $id,
             ]
