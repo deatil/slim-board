@@ -1,4 +1,4 @@
-# slim-board 简单社区论坛系统，使用slimphp开发
+# slim-board 社区论坛系统
 
 
 ## 项目介绍
