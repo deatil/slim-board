@@ -1,9 +1,9 @@
-# slim-board 简单留言板
+# slim-board 简单社区论坛系统，使用slimphp开发
 
 
 ## 项目介绍
 
-*  `slim-board` 是基于 `slim` 的 PHP 简单留言板
+*  `slim-board` 是基于 `slimphp` 的 PHP 简单社区论坛系统
 
 
 ## 环境要求
