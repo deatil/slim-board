@@ -42,11 +42,23 @@ class Msg
     public static function toData($data): StreamInterface 
     {
         $streamFactory = new StreamFactory();
-        $body = $streamFactory->createStream();
         
+        $body = $streamFactory->createStream();
         $body->write($data);
         
         return $body;
+    }
+    
+    /**
+     * 响应页面
+     *
+     * @return string
+     */
+    public static function toView($tpl, $data = [])
+    {
+        $view = Gable::$di->get('view')->fetch($tpl, $data);
+        
+        return static::toData($view);
     }
     
     /**
@@ -60,14 +72,12 @@ class Msg
         $wait = 5,
         $tpl = 'error/error.html'
     ): StreamInterface {
-        $view = Gable::$di->get('view')->fetch($tpl, [
+        return static::toView($tpl, [
             'msg' => $msg,
             'url' => $url,
             'wait' => $wait,
             'code' => 1,
         ]);
-        
-        return static::toData($view);
     }
     
     /**
@@ -81,13 +91,91 @@ class Msg
         $wait = 5,
         $tpl = 'error/error.html'
     ): StreamInterface {
-        $view = Gable::$di->get('view')->fetch($tpl , [
+        return static::toView($tpl , [
             'msg' => $msg,
             'url' => $url,
             'wait' => $wait,
             'code' => 0,
         ]);
-        
-        return static::toData($view);
     }
+    
+    /**
+     * 响应数据
+     *
+     * @return string
+     */
+    public static function reponseData(
+        $data,
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): ResponseInterface {
+        $body = static::toData($data);
+
+        return Msg::createResponse($code, $reasonPhrase)->withBody($body);
+    }
+    
+    /**
+     * 输出 json
+     *
+     * @return string
+     */
+    public static function reponseJson(
+        $data,
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): ResponseInterface {
+        return static::reponseData($data, $code, $reasonPhrase)
+            ->withHeader("Content-Type", "application/json; charset=utf-8");
+    }
+    
+    /**
+     * 响应页面
+     *
+     * @return string
+     */
+    public static function reponseView($tpl, $data = []): ResponseInterface
+    {
+        $view = Gable::$di->get('view')->fetch($tpl, $data);
+        
+        return static::reponseData($view);
+    }
+    
+    /**
+     * 输出成功页面
+     *
+     * @return string
+     */
+    public static function reponseSuccess(
+        $msg, 
+        $url = '', 
+        $wait = 5,
+        $tpl = 'error/error.html'
+    ): ResponseInterface {
+        return static::reponseView($tpl, [
+            'msg' => $msg,
+            'url' => $url,
+            'wait' => $wait,
+            'code' => 1,
+        ]);
+    }
+    
+    /**
+     * 输出错误页面
+     *
+     * @return string
+     */
+    public static function reponseError(
+        $msg, 
+        $url = '', 
+        $wait = 5,
+        $tpl = 'error/error.html'
+    ): ResponseInterface {
+        return static::reponseView($tpl , [
+            'msg' => $msg,
+            'url' => $url,
+            'wait' => $wait,
+            'code' => 0,
+        ]);
+    }
+
 }

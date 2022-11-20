@@ -4,6 +4,8 @@
 ## 项目介绍
 
 *  `slim-board` 是基于 `slimphp` 的 PHP 简单社区论坛系统
+*  orm 使用的是 Medoo 库
+*  视图驱动使用的是 Twig 库
 
 
 ## 环境要求
@@ -65,7 +67,7 @@ data/config/database.php
 /docs/slim_board.sql
 ```
 
-4. 设置 `/data/log` 和 `/data/runtime` 目录有写入和读取权限
+4. 设置 `/data/log` 目录有写入权限 和 `/data/runtime` 目录有写入和读取权限
 
 5. 后台地址 `http://yourdomain.com/admin/index`, 登录账号：`admin` 及密码 `123456`
 

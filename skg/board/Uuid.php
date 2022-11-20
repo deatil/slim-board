@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Skg\Board;
 
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Uuid as RamseyUuid;
 
 /**
  * Uuid
@@ -21,7 +21,7 @@ class Uuid
      */
     public static function make(): string
     {
-        $uuid = Uuid::uuid4();
+        $uuid = RamseyUuid::uuid4();
         
         return $uuid->toString();
     }

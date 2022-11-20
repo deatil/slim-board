@@ -47,8 +47,7 @@ class CheckLoginMiddleware implements MiddlewareInterface
     
     protected function responseMsg(ServerRequestInterface $request, string $msg)
     {
-        $app = Gable::$app;
-        $response = $app->getResponseFactory()->createResponse(200);
+        $response = Gable::$app->getResponseFactory()->createResponse(200);
         
         $method = $request->getMethod();
         if (strtolower($method) == "post") {

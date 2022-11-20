@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skg\Board;
 
 use Slim\Psr7\NonBufferedBody;
+use Slim\Psr7\Factory\StreamFactory;
 
 /**
  * 响应
@@ -15,14 +16,20 @@ use Slim\Psr7\NonBufferedBody;
 class Response
 {
     /**
-     * 数据
+     * 响应数据
      *
      * @param object $response 响应对象
      * @param mixed  $data     数据
      */
     public static function data($response, $data)
     {
-        $response->getBody()->write($data);
+        $streamFactory = new StreamFactory();
+
+        // $body = $response->getBody();
+        $body = $streamFactory->createStream();
+        $body->write($data);
+        
+        $response = $response->withBody($body);
         return $response;
     }
     
@@ -36,10 +43,10 @@ class Response
     {
         $payload = json_encode($data, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
         
-        header('Content-type:application/json; charset=utf-8');
+        $response = static::data($response, $payload);
         $response = $response->withHeader("Content-Type", "application/json; charset=utf-8");
         
-        return static::data($response, $payload);
+        return $response;
     }
     
     /**

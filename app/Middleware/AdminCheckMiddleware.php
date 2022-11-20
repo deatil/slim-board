@@ -11,6 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use Skg\Board\Msg;
 use Skg\Board\Gable;
+use Skg\Board\Response;
 
 /**
  * 管理员验证
@@ -31,38 +32,37 @@ class AdminCheckMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = Msg::createResponse(200);
-        
         $authUser = $request->getAttribute("auth-user");
         
-        if (!$authUser->isLogin()) {
-            $body = $this->toMsg("请先登录");
-            return $response->withBody($body);
+        if (empty($authUser) || !$authUser->isLogin()) {
+            return $this->error($request, "请先登录", url("board.auth-login"));
         }
         
         if (! $authUser->isActive()) {
-            $body = $this->toMsg("账号不存在或者已被禁用");
-            return $response->withBody($body);
+            return $this->error($request, "账号不存在或者已被禁用");
         }
         
         if (! $authUser->isAdmin()) {
-            $body = $this->toMsg("你没有权限访问该页面");
-            return $response->withBody($body);
+            return $this->error($request, "你没有权限访问该页面");
         }
         
         return $handler->handle($request);
     }
     
     /**
-     * 模板
+     * 错误
      */
-    protected function toMsg($msg)
+    protected function error($request, $msg, $url = '')
     {
-        $template = $this->template();
+        $response = Msg::createResponse(200);
         
-        $body = Msg::toError($msg, "", 3, $template);
+        $method = $request->getMethod();
+        if (strtolower($method) == "post") {
+            return Response::errorJson($response, $msg, 1);
+        }
         
-        return $body;
+        $body = Msg::toError($msg, $url, 3, $this->template());
+        return $response->withBody($body);
     }
     
     /**
